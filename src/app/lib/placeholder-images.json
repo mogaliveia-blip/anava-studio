@@ -1,0 +1,29 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "project-coffre",
+      "description": "Dashboard for team management and planning",
+      "imageUrl": "https://picsum.photos/seed/coffre/800/600",
+      "imageHint": "dashboard business"
+    },
+    {
+      "id": "project-facturation",
+      "description": "Invoicing and financial tracking interface",
+      "imageUrl": "https://picsum.photos/seed/billing/800/600",
+      "imageHint": "invoice software"
+    },
+    {
+      "id": "project-terrain",
+      "description": "Mobile interface for field technician intervention",
+      "imageUrl": "https://picsum.photos/seed/field/800/600",
+      "imageHint": "mobile app worker"
+    },
+    {
+      "id": "project-crm",
+      "description": "Customer relationship management and reporting dashboard",
+      "imageUrl": "https://picsum.photos/seed/crm/800/600",
+      "imageHint": "analytics chart"
+    }
+  ]
+}
