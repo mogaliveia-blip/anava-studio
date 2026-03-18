@@ -1,4 +1,3 @@
-
 "use client"
 
 import React from 'react'
@@ -35,6 +34,9 @@ export function Projects() {
     }
   ]
 
+  // Default fallback image if reference is missing
+  const defaultImageUrl = "https://picsum.photos/seed/default/800/600"
+
   return (
     <section id="realisations" className="py-24 bg-white">
       <div className="container mx-auto px-6">
@@ -52,13 +54,13 @@ export function Projects() {
             const imageData = PlaceHolderImages.find(img => img.id === project.imageId)
             return (
               <Card key={index} className="overflow-hidden group hover:shadow-xl transition-all duration-300 border-border/50">
-                <div className="relative aspect-video overflow-hidden">
+                <div className="relative aspect-video overflow-hidden bg-muted">
                   <Image 
-                    src={imageData?.imageUrl || ''} 
+                    src={imageData?.imageUrl || defaultImageUrl} 
                     alt={project.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    data-ai-hint={imageData?.imageHint}
+                    data-ai-hint={imageData?.imageHint || "business project"}
                   />
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-primary text-white px-3 py-1 text-xs">{project.tag}</Badge>
