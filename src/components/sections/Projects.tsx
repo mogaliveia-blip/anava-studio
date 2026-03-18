@@ -3,39 +3,37 @@
 import React from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { PlaceHolderImages } from '@/lib/placeholder-images'
 import Image from 'next/image'
+import { useFirestore, useCollection } from '@/firebase'
+import { collection, query, orderBy } from 'firebase/firestore'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function Projects() {
-  const projects = [
-    {
-      name: "Coffre",
-      description: "Système complet de gestion des équipes et de planning dynamique pour PME.",
-      tag: "Planning",
-      imageId: "project-coffre"
-    },
-    {
-      name: "App Facturation",
-      description: "Plateforme de création de devis automatisée et suivi financier en temps réel.",
-      tag: "Facturation",
-      imageId: "project-facturation"
-    },
-    {
-      name: "App Terrain",
-      description: "Application mobile pour techniciens permettant le suivi des interventions et rapports photo.",
-      tag: "Terrain",
-      imageId: "project-terrain"
-    },
-    {
-      name: "Suivi Client",
-      description: "CRM métier pour la gestion et l'analyse comportementale de la clientèle.",
-      tag: "CRM",
-      imageId: "project-crm"
-    }
-  ]
+  const db = useFirestore()
+  
+  // Requête vers la collection 'projects' triée par le champ 'order'
+  const projectsQuery = query(
+    collection(db, 'projects'),
+    orderBy('order', 'asc')
+  )
+  
+  const { data: projects, loading, error } = useCollection<{
+    title: string;
+    description: string;
+    imageUrl: string;
+    tag: string;
+    order: number;
+  }>(projectsQuery)
 
-  // Default fallback image if reference is missing
   const defaultImageUrl = "https://picsum.photos/seed/default/800/600"
+
+  if (error) {
+    return (
+      <div className="py-24 text-center text-destructive">
+        Une erreur est survenue lors du chargement des projets.
+      </div>
+    )
+  }
 
   return (
     <section id="realisations" className="py-24 bg-white">
@@ -50,31 +48,45 @@ export function Projects() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project, index) => {
-            const imageData = PlaceHolderImages.find(img => img.id === project.imageId)
-            return (
-              <Card key={index} className="overflow-hidden group hover:shadow-xl transition-all duration-300 border-border/50">
+          {loading ? (
+            // Skeleton loader pendant le chargement
+            Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i} className="overflow-hidden border-border/50">
+                <Skeleton className="aspect-video w-full" />
+                <CardContent className="p-8">
+                  <Skeleton className="h-8 w-1/3 mb-4" />
+                  <Skeleton className="h-20 w-full" />
+                </CardContent>
+              </Card>
+            ))
+          ) : projects && projects.length > 0 ? (
+            projects.map((project) => (
+              <Card key={project.id} className="overflow-hidden group hover:shadow-xl transition-all duration-300 border-border/50">
                 <div className="relative aspect-video overflow-hidden bg-muted">
                   <Image 
-                    src={imageData?.imageUrl || defaultImageUrl} 
-                    alt={project.name}
+                    src={project.imageUrl || defaultImageUrl} 
+                    alt={project.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    data-ai-hint={imageData?.imageHint || "business project"}
+                    data-ai-hint="business project"
                   />
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-primary text-white px-3 py-1 text-xs">{project.tag}</Badge>
                   </div>
                 </div>
                 <CardContent className="p-8">
-                  <h3 className="font-headline text-2xl font-bold text-primary mb-3">{project.name}</h3>
+                  <h3 className="font-headline text-2xl font-bold text-primary mb-3">{project.title}</h3>
                   <p className="text-muted-foreground leading-relaxed">
                     {project.description}
                   </p>
                 </CardContent>
               </Card>
-            )
-          })}
+            ))
+          ) : (
+            <div className="col-span-2 text-center py-12 text-muted-foreground border-2 border-dashed rounded-2xl">
+              Aucun projet à afficher pour le moment.
+            </div>
+          )}
         </div>
       </div>
     </section>
