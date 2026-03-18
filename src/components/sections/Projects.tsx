@@ -1,6 +1,7 @@
+
 "use client"
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Image from 'next/image'
@@ -11,11 +12,11 @@ import { Skeleton } from '@/components/ui/skeleton'
 export function Projects() {
   const db = useFirestore()
   
-  // Requête vers la collection 'projects' triée par le champ 'order'
-  const projectsQuery = query(
+  // Utilisation de useMemo pour éviter de recréer la requête à chaque rendu
+  const projectsQuery = useMemo(() => query(
     collection(db, 'projects'),
     orderBy('order', 'asc')
-  )
+  ), [db])
   
   const { data: projects, loading, error } = useCollection<{
     title: string;
