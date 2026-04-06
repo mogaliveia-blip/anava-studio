@@ -1,3 +1,4 @@
+
 "use client"
 
 import React, { useMemo } from 'react'
@@ -7,6 +8,7 @@ import Image from 'next/image'
 import { useFirestore, useCollection } from '@/firebase'
 import { collection, query, orderBy, where } from 'firebase/firestore'
 import { Skeleton } from '@/components/ui/skeleton'
+import placeholderData from '@/app/lib/placeholder-images.json'
 
 export function Projects() {
   const db = useFirestore()
@@ -42,11 +44,11 @@ export function Projects() {
         <div className="max-w-3xl mb-20">
           <p className="text-primary font-bold uppercase tracking-widest text-sm mb-4">Portfolio</p>
           <h2 className="font-headline text-4xl md:text-6xl font-bold text-white mb-6">
-            Deux façons de découvrir <br />
-            <span className="text-primary">nos réalisations</span>
+            Des solutions concrètes <br />
+            <span className="text-primary text-gradient">pour votre métier</span>
           </h2>
           <p className="text-xl text-muted-foreground">
-            Aperçu des solutions que nous avons déployées. Chaque projet répond à une problématique métier spécifique.
+            Découvrez nos dernières réalisations, comme <strong>Mission Pilot</strong>, conçues pour optimiser les opérations complexes et la gestion d'équipes.
           </p>
         </div>
 
@@ -70,7 +72,6 @@ export function Projects() {
                     alt={project.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    data-ai-hint="business software"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="absolute top-4 left-4">
@@ -86,9 +87,32 @@ export function Projects() {
               </Card>
             ))
           ) : (
-            <div className="col-span-2 text-center py-20 text-muted-foreground border-2 border-dashed border-white/10 rounded-3xl bg-white/5">
-              Aucun projet à afficher pour le moment.
-            </div>
+            // Fallback content using placeholders if no Firestore data exists yet
+            placeholderData.placeholderImages.map((placeholder, index) => (
+              <Card key={index} className="overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 border-white/5 bg-secondary/50 opacity-60 hover:opacity-100">
+                <div className="relative aspect-video overflow-hidden">
+                  <Image 
+                    src={placeholder.imageUrl} 
+                    alt={placeholder.id}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    data-ai-hint={placeholder.imageHint}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+                  <div className="absolute top-4 left-4">
+                    <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 px-4 py-1.5 text-xs font-bold rounded-full uppercase tracking-tighter">Exemple Réel</Badge>
+                  </div>
+                </div>
+                <CardContent className="p-10">
+                  <h3 className="font-headline text-3xl font-bold text-white mb-4 group-hover:text-primary transition-colors">
+                    {placeholder.id === 'project-mission-pilot' ? 'Mission Pilot' : placeholder.id.split('-')[1].toUpperCase()}
+                  </h3>
+                  <p className="text-muted-foreground text-lg leading-relaxed">
+                    {placeholder.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))
           )}
         </div>
       </div>

@@ -2,28 +2,28 @@
 {
   "placeholderImages": [
     {
+      "id": "project-mission-pilot",
+      "description": "Plateforme de pilotage de missions et coordination d'équipes terrain en temps réel.",
+      "imageUrl": "https://picsum.photos/seed/missionpilot/800/600",
+      "imageHint": "mission control dashboard"
+    },
+    {
       "id": "project-coffre",
-      "description": "Dashboard for team management and planning",
+      "description": "Dashboard de gestion d'actifs et planification sécurisée pour entreprises.",
       "imageUrl": "https://picsum.photos/seed/coffre/800/600",
-      "imageHint": "dashboard business"
+      "imageHint": "business dashboard"
     },
     {
       "id": "project-facturation",
-      "description": "Invoicing and financial tracking interface",
+      "description": "Interface automatisée de facturation et suivi financier analytique.",
       "imageUrl": "https://picsum.photos/seed/billing/800/600",
       "imageHint": "invoice software"
     },
     {
       "id": "project-terrain",
-      "description": "Mobile interface for field technician intervention",
+      "description": "Application mobile pour techniciens : rapports d'intervention et synchronisation cloud.",
       "imageUrl": "https://picsum.photos/seed/field/800/600",
       "imageHint": "mobile app worker"
-    },
-    {
-      "id": "project-crm",
-      "description": "Customer relationship management and reporting dashboard",
-      "imageUrl": "https://picsum.photos/seed/crm/800/600",
-      "imageHint": "analytics chart"
     }
   ]
 }
