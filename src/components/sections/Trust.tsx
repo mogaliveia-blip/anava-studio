@@ -43,7 +43,7 @@ export function Trust() {
                         <span className="text-xs uppercase tracking-widest text-muted-foreground">Frontend</span>
                     </div>
                     <div className="bg-white p-6 rounded-xl shadow-sm border flex flex-col items-center justify-center space-y-2">
-                        <span className="text-4xl font-headline font-bold text-accent">Fire</span>
+                        <span className="text-4xl font-headline font-bold text-accent">Firebase</span>
                         <span className="text-xs uppercase tracking-widest text-muted-foreground">Backend</span>
                     </div>
                     <div className="col-span-2 bg-primary text-white p-6 rounded-xl shadow-sm flex flex-col items-center justify-center space-y-2">
