@@ -3,27 +3,19 @@
   "placeholderImages": [
     {
       "id": "project-mission-pilot",
-      "description": "Plateforme de pilotage de missions et coordination d'équipes terrain en temps réel.",
-      "imageUrl": "https://picsum.photos/seed/missionpilot/800/600",
-      "imageHint": "mission control dashboard"
+      "title": "Mission Pilot",
+      "description": "Plateforme de pilotage de missions et coordination d'équipes terrain en temps réel. Optimisation des flux opérationnels pour les entreprises à forte activité mobile.",
+      "imageUrl": "https://picsum.photos/seed/missionpilotv2/800/600",
+      "imageHint": "control center dashboard",
+      "tag": "OPÉRATIONS"
     },
     {
       "id": "project-coffre",
-      "description": "Dashboard de gestion d'actifs et planification sécurisée pour entreprises.",
-      "imageUrl": "https://picsum.photos/seed/coffre/800/600",
-      "imageHint": "business dashboard"
-    },
-    {
-      "id": "project-facturation",
-      "description": "Interface automatisée de facturation et suivi financier analytique.",
-      "imageUrl": "https://picsum.photos/seed/billing/800/600",
-      "imageHint": "invoice software"
-    },
-    {
-      "id": "project-terrain",
-      "description": "Application mobile pour techniciens : rapports d'intervention et synchronisation cloud.",
-      "imageUrl": "https://picsum.photos/seed/field/800/600",
-      "imageHint": "mobile app worker"
+      "title": "Gestion d'actifs",
+      "description": "Dashboard de planification sécurisée pour entreprises. Centralisation des données critiques et suivi analytique des performances.",
+      "imageUrl": "https://picsum.photos/seed/businessv2/800/600",
+      "imageHint": "enterprise software",
+      "tag": "MANAGEMENT"
     }
   ]
 }

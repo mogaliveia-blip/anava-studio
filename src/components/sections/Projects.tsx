@@ -10,45 +10,49 @@ import { collection, query, orderBy, where } from 'firebase/firestore'
 import { Skeleton } from '@/components/ui/skeleton'
 import placeholderData from '@/app/lib/placeholder-images.json'
 
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  tag: string;
+  order: number;
+  active: boolean;
+}
+
 export function Projects() {
   const db = useFirestore()
   
+  // Simplification de la requête pour éviter les erreurs d'index au démarrage
   const projectsQuery = useMemo(() => query(
     collection(db, 'projects'),
-    where('active', '==', true),
     orderBy('order', 'asc')
   ), [db])
   
-  const { data: projects, loading, error } = useCollection<{
-    title: string;
-    description: string;
-    imageUrl: string;
-    tag: string;
-    order: number;
-    active: boolean;
-  }>(projectsQuery)
+  const { data: firestoreProjects, loading, error } = useCollection<Project>(projectsQuery)
+
+  // Filtrage côté client pour éviter les erreurs d'index Firestore (composite index required for where + order)
+  const activeProjects = useMemo(() => {
+    if (!firestoreProjects) return null
+    return firestoreProjects.filter(p => p.active !== false)
+  }, [firestoreProjects])
 
   const defaultImageUrl = "https://picsum.photos/seed/default/800/600"
 
-  if (error) {
-    return (
-      <div className="py-24 text-center text-destructive">
-        Une erreur est survenue lors du chargement des projets.
-      </div>
-    )
-  }
+  // Si Firestore est vide ou en erreur, on affiche les placeholders
+  const showPlaceholders = !loading && (!activeProjects || activeProjects.length === 0);
 
   return (
     <section id="realisations" className="py-24 bg-background">
       <div className="container mx-auto px-6">
-        <div className="max-w-3xl mb-20">
+        <div className="max-w-3xl mb-20 animate-fade-in-up">
           <p className="text-primary font-bold uppercase tracking-widest text-sm mb-4">Portfolio</p>
           <h2 className="font-headline text-4xl md:text-6xl font-bold text-white mb-6">
             Des solutions concrètes <br />
             <span className="text-primary text-gradient">pour votre métier</span>
           </h2>
           <p className="text-xl text-muted-foreground">
-            Découvrez nos dernières réalisations, comme <strong>Mission Pilot</strong>, conçues pour optimiser les opérations complexes et la gestion d'équipes.
+            Découvrez nos dernières réalisations logicielles, comme <strong>Mission Pilot</strong>, conçues pour optimiser les opérations complexes.
           </p>
         </div>
 
@@ -63,8 +67,36 @@ export function Projects() {
                 </CardContent>
               </Card>
             ))
-          ) : projects && projects.length > 0 ? (
-            projects.map((project) => (
+          ) : showPlaceholders ? (
+            // Contenu de démonstration (Fallback)
+            placeholderData.placeholderImages.map((placeholder, index) => (
+              <Card key={index} className="overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 border-white/5 bg-secondary/50">
+                <div className="relative aspect-video overflow-hidden">
+                  <Image 
+                    src={placeholder.imageUrl} 
+                    alt={placeholder.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    data-ai-hint={placeholder.imageHint}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
+                  <div className="absolute top-4 left-4">
+                    <Badge variant="default" className="bg-primary text-primary-foreground px-4 py-1.5 text-xs font-bold rounded-full uppercase tracking-tighter">
+                      {placeholder.tag}
+                    </Badge>
+                  </div>
+                </div>
+                <CardContent className="p-10">
+                  <h3 className="font-headline text-3xl font-bold text-white mb-4 group-hover:text-primary transition-colors">
+                    {placeholder.title}
+                  </h3>
+                  <p className="text-muted-foreground text-lg leading-relaxed">
+                    {placeholder.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))
+          ) : activeProjects?.map((project) => (
               <Card key={project.id} className="overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 border-white/5 bg-secondary/50">
                 <div className="relative aspect-video overflow-hidden">
                   <Image 
@@ -73,7 +105,7 @@ export function Projects() {
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-primary text-primary-foreground px-4 py-1.5 text-xs font-bold rounded-full">{project.tag}</Badge>
                   </div>
@@ -85,34 +117,7 @@ export function Projects() {
                   </p>
                 </CardContent>
               </Card>
-            ))
-          ) : (
-            // Fallback content using placeholders if no Firestore data exists yet
-            placeholderData.placeholderImages.map((placeholder, index) => (
-              <Card key={index} className="overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 border-white/5 bg-secondary/50 opacity-60 hover:opacity-100">
-                <div className="relative aspect-video overflow-hidden">
-                  <Image 
-                    src={placeholder.imageUrl} 
-                    alt={placeholder.id}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    data-ai-hint={placeholder.imageHint}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 px-4 py-1.5 text-xs font-bold rounded-full uppercase tracking-tighter">Exemple Réel</Badge>
-                  </div>
-                </div>
-                <CardContent className="p-10">
-                  <h3 className="font-headline text-3xl font-bold text-white mb-4 group-hover:text-primary transition-colors">
-                    {placeholder.id === 'project-mission-pilot' ? 'Mission Pilot' : placeholder.id.split('-')[1].toUpperCase()}
-                  </h3>
-                  <p className="text-muted-foreground text-lg leading-relaxed">
-                    {placeholder.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))
+            )
           )}
         </div>
       </div>
