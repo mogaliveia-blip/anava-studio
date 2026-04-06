@@ -47,7 +47,7 @@ export function Contact() {
                     <Mail size={24} />
                   </div>
                   <div>
-                    <h4 className="font-headline font-bold text-lg">Contact par Email</h4>
+                    <h4 className="font-headline font-bold text-lg text-primary">Contact par Email</h4>
                     <p className="text-muted-foreground">contact@anavastudio.fr</p>
                   </div>
                 </div>
@@ -56,7 +56,7 @@ export function Contact() {
                     <MapPin size={24} />
                   </div>
                   <div>
-                    <h4 className="font-headline font-bold text-lg">Localisation</h4>
+                    <h4 className="font-headline font-bold text-lg text-primary">Localisation</h4>
                     <p className="text-muted-foreground">France - Travail à distance & Déplacements</p>
                   </div>
                 </div>
@@ -66,18 +66,18 @@ export function Contact() {
             <div className="bg-background p-8 md:p-10 rounded-2xl border border-border shadow-sm">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Nom</Label>
-                  <Input id="name" name="name" placeholder="Votre nom complet" required className="bg-white" />
+                  <Label htmlFor="name" className="text-white">Nom</Label>
+                  <Input id="name" name="name" placeholder="Votre nom complet" required className="bg-white text-black" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" name="email" type="email" placeholder="votre@email.com" required className="bg-white" />
+                  <Label htmlFor="email" className="text-white">Email</Label>
+                  <Input id="email" name="email" type="email" placeholder="votre@email.com" required className="bg-white text-black" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea id="message" name="message" placeholder="Parlez-nous de votre projet..." required className="min-h-[150px] bg-white" />
+                  <Label htmlFor="message" className="text-white">Message</Label>
+                  <Textarea id="message" name="message" placeholder="Parlez-nous de votre projet..." required className="min-h-[150px] bg-white text-black" />
                 </div>
-                <Button type="submit" size="lg" className="w-full h-14 text-lg font-medium" disabled={isSubmitting}>
+                <Button type="submit" size="lg" className="w-full h-14 text-lg font-bold" disabled={isSubmitting}>
                   {isSubmitting ? "Envoi en cours..." : (
                     <>
                       Envoyer
