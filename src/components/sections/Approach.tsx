@@ -31,27 +31,37 @@ export function Approach() {
           
           <div className="space-y-12 md:space-y-0">
             {steps.map((step, index) => (
-              <div key={index} className={`flex flex-col md:flex-row items-center ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                <div className="flex-1 md:p-12 text-center md:text-left">
-                  <div className={`hidden md:block ${index % 2 === 0 ? 'md:text-left' : 'md:text-right'}`}>
-                    <h3 className="font-headline text-2xl font-bold mb-3">{step.title}</h3>
-                    <p className="opacity-70 text-lg leading-relaxed">{step.desc}</p>
-                  </div>
+              <div key={index} className="flex flex-col md:flex-row items-center">
+                {/* Desktop Left Column */}
+                <div className="hidden md:block flex-1 p-12 text-right">
+                  {index % 2 === 0 && (
+                    <div className="animate-fade-in-up">
+                      <h3 className="font-headline text-2xl font-bold mb-3">{step.title}</h3>
+                      <p className="opacity-70 text-lg leading-relaxed">{step.desc}</p>
+                    </div>
+                  )}
                 </div>
                 
+                {/* Central Number Circle */}
                 <div className="relative z-10 w-12 h-12 rounded-full bg-accent flex items-center justify-center font-headline font-bold text-white shadow-lg shrink-0">
                   {index + 1}
                 </div>
                 
+                {/* Desktop Right Column + Mobile View */}
                 <div className="flex-1 p-6 md:p-12 text-center md:text-left">
-                  <div className={`md:hidden`}>
+                  {/* Mobile View: Always show */}
+                  <div className="md:hidden">
                     <h3 className="font-headline text-2xl font-bold mb-3">{step.title}</h3>
                     <p className="opacity-70 text-lg leading-relaxed">{step.desc}</p>
                   </div>
-                  <div className={`hidden md:block ${index % 2 !== 0 ? 'md:text-left' : 'md:text-right'}`}>
-                    <h3 className="font-headline text-2xl font-bold mb-3">{step.title}</h3>
-                    <p className="opacity-70 text-lg leading-relaxed">{step.desc}</p>
-                  </div>
+                  
+                  {/* Desktop View: Show only for odd indices */}
+                  {index % 2 !== 0 && (
+                    <div className="hidden md:block animate-fade-in-up">
+                      <h3 className="font-headline text-2xl font-bold mb-3">{step.title}</h3>
+                      <p className="opacity-70 text-lg leading-relaxed">{step.desc}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
