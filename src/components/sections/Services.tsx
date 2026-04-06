@@ -35,7 +35,7 @@ export function Services() {
           <div className="flex-1 relative">
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-8 border-white">
               <img 
-                src="https://picsum.photos/seed/tech/800/1000" 
+                src="https://picsum.photos/seed/software-ui-complex/800/1000" 
                 alt="Digital tools interface" 
                 className="w-full h-auto"
                 data-ai-hint="software dashboard"

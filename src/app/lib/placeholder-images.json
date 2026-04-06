@@ -5,16 +5,16 @@
       "id": "project-mission-pilot",
       "title": "Mission Pilot",
       "description": "Plateforme de pilotage de missions et coordination d'équipes terrain en temps réel. Optimisation des flux opérationnels pour les entreprises à forte activité mobile.",
-      "imageUrl": "https://picsum.photos/seed/missionpilotv2/800/600",
-      "imageHint": "control center dashboard",
+      "imageUrl": "https://picsum.photos/seed/mission-control-system/800/600",
+      "imageHint": "control dashboard",
       "tag": "OPÉRATIONS"
     },
     {
       "id": "project-coffre",
       "title": "Gestion d'actifs",
       "description": "Dashboard de planification sécurisée pour entreprises. Centralisation des données critiques et suivi analytique des performances.",
-      "imageUrl": "https://picsum.photos/seed/businessv2/800/600",
-      "imageHint": "enterprise software",
+      "imageUrl": "https://picsum.photos/seed/enterprise-analytics/800/600",
+      "imageHint": "business interface",
       "tag": "MANAGEMENT"
     }
   ]
