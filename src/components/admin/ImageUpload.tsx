@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -17,6 +17,7 @@ export function ImageUpload({ onUploadComplete, currentImageUrl }: ImageUploadPr
   const [preview, setPreview] = useState<string | null>(currentImageUrl || null)
   const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const lastNotifiedUrl = useRef<string | null>(null)
   const { uploadFile, progress, url, error } = useStorage()
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,10 +42,11 @@ export function ImageUpload({ onUploadComplete, currentImageUrl }: ImageUploadPr
     }
   }
 
-  // Effect to handle URL from useStorage
-  React.useEffect(() => {
-    if (url) {
+  // Effect to handle URL from useStorage and prevent infinite loops
+  useEffect(() => {
+    if (url && url !== lastNotifiedUrl.current) {
       onUploadComplete(url)
+      lastNotifiedUrl.current = url
       setIsUploading(false)
     }
   }, [url, onUploadComplete])

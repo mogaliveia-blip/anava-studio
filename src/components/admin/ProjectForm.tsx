@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -52,6 +52,10 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
       })
     }
   }, [project])
+
+  const handleImageUpload = useCallback((url: string) => {
+    setFormData(prev => ({ ...prev, imageUrl: url }))
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -161,7 +165,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
         <div className="space-y-8">
           <ImageUpload 
             currentImageUrl={formData.imageUrl} 
-            onUploadComplete={(url) => setFormData({...formData, imageUrl: url})} 
+            onUploadComplete={handleImageUpload} 
           />
 
           <div className="space-y-6 bg-background/50 p-6 rounded-2xl border border-white/5">
