@@ -10,7 +10,7 @@ import { useFirestore } from '@/firebase'
 import { collection, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore'
 import { ImageUpload } from './ImageUpload'
 import { toast } from '@/hooks/use-toast'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Save, X } from 'lucide-react'
 
 interface ProjectFormProps {
   project?: any
@@ -56,7 +56,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!formData.imageUrl) {
-      toast({ variant: "destructive", title: "Image requise", description: "Veuillez uploader une image pour le projet." })
+      toast({ variant: "destructive", title: "Image manquante", description: "Veuillez uploader une capture du projet." })
       return
     }
 
@@ -67,126 +67,141 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
           ...formData,
           updatedAt: serverTimestamp()
         })
-        toast({ title: "Projet mis à jour", description: "Les modifications ont été enregistrées." })
+        toast({ title: "Projet mis à jour", description: "Modifications enregistrées avec succès." })
       } else {
         await addDoc(collection(db, 'projects'), {
           ...formData,
           createdAt: serverTimestamp()
         })
-        toast({ title: "Projet créé", description: "Le nouveau projet a été ajouté au portfolio." })
+        toast({ title: "Projet créé", description: "Le projet a été ajouté à votre portfolio." })
       }
       onSuccess()
     } catch (error) {
       console.error(error)
-      toast({ variant: "destructive", title: "Erreur", description: "Impossible d'enregistrer le projet." })
+      toast({ variant: "destructive", title: "Erreur", description: "Impossible d'enregistrer les données." })
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 bg-white p-8 rounded-2xl border shadow-sm">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <form onSubmit={handleSubmit} className="space-y-8 bg-secondary/20 p-8 md:p-12 rounded-3xl border border-white/5 shadow-2xl animate-fade-in-up">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="title">Titre du projet</Label>
+            <Label htmlFor="title" className="text-white font-bold">Titre du projet</Label>
             <Input 
               id="title" 
               value={formData.title} 
               onChange={e => setFormData({...formData, title: e.target.value})} 
               required 
+              className="bg-background border-white/10 text-white focus:border-primary/50 h-12"
+              placeholder="ex: Mission Pilot"
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="tag">Tag / Catégorie</Label>
+            <Label htmlFor="tag" className="text-white font-bold">Catégorie / Tag</Label>
             <Input 
               id="tag" 
-              placeholder="CRM, Mobile, Planning..."
+              placeholder="LOGICIEL MÉTIER, CRM, DASHBOARD..."
               value={formData.tag} 
               onChange={e => setFormData({...formData, tag: e.target.value})} 
               required 
+              className="bg-background border-white/10 text-white focus:border-primary/50 h-12"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description" className="text-white font-bold">Description</Label>
             <Textarea 
               id="description" 
-              className="min-h-[120px]"
+              className="min-h-[160px] bg-background border-white/10 text-white focus:border-primary/50 leading-relaxed"
               value={formData.description} 
               onChange={e => setFormData({...formData, description: e.target.value})} 
               required 
+              placeholder="Expliquez la valeur ajoutée de cet outil..."
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-6 pt-4">
             <div className="space-y-2">
-              <Label htmlFor="order">Ordre d'affichage</Label>
+              <Label htmlFor="order" className="text-white font-bold">Ordre d'affichage</Label>
               <Input 
                 id="order" 
                 type="number"
                 value={formData.order} 
-                onChange={e => setFormData({...formData, order: parseInt(e.target.value)})} 
+                onChange={e => setFormData({...formData, order: parseInt(e.target.value) || 0})} 
+                className="bg-background border-white/10 text-white h-12"
               />
             </div>
-            <div className="flex flex-col space-y-4 pt-8">
-              <div className="flex items-center space-x-2">
+            <div className="flex flex-col justify-center space-y-4 pt-6">
+              <div className="flex items-center space-x-3">
                 <Checkbox 
                   id="active" 
                   checked={formData.active} 
                   onCheckedChange={checked => setFormData({...formData, active: !!checked})} 
+                  className="border-primary data-[state=checked]:bg-primary"
                 />
-                <Label htmlFor="active">Projet actif</Label>
+                <Label htmlFor="active" className="text-white cursor-pointer">Visible sur le site</Label>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <Checkbox 
                   id="featured" 
                   checked={formData.featured} 
                   onCheckedChange={checked => setFormData({...formData, featured: !!checked})} 
+                  className="border-primary data-[state=checked]:bg-primary"
                 />
-                <Label htmlFor="featured">Mettre en avant</Label>
+                <Label htmlFor="featured" className="text-white cursor-pointer">Mettre en avant</Label>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-8">
           <ImageUpload 
             currentImageUrl={formData.imageUrl} 
             onUploadComplete={(url) => setFormData({...formData, imageUrl: url})} 
           />
 
-          <div className="space-y-4 border-t pt-4 mt-4">
-            <h4 className="font-medium text-sm text-muted-foreground uppercase tracking-wider">Liens externes</h4>
-            <div className="space-y-2">
-              <Label htmlFor="demo">Lien Démo</Label>
-              <Input 
-                id="demo" 
-                placeholder="https://..."
-                value={formData.links.demo} 
-                onChange={e => setFormData({...formData, links: {...formData.links, demo: e.target.value}})} 
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="caseStudy">Lien Étude de cas</Label>
-              <Input 
-                id="caseStudy" 
-                placeholder="https://..."
-                value={formData.links.caseStudy} 
-                onChange={e => setFormData({...formData, links: {...formData.links, caseStudy: e.target.value}})} 
-              />
+          <div className="space-y-6 bg-background/50 p-6 rounded-2xl border border-white/5">
+            <h4 className="font-headline font-bold text-sm text-primary uppercase tracking-widest">Liens additionnels</h4>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="demo" className="text-white/70 text-sm">Lien vers la démo / app</Label>
+                <Input 
+                  id="demo" 
+                  placeholder="https://app.anavastudio.fr/..."
+                  value={formData.links.demo} 
+                  onChange={e => setFormData({...formData, links: {...formData.links, demo: e.target.value}})} 
+                  className="bg-background border-white/10 text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="caseStudy" className="text-white/70 text-sm">Lien Étude de cas (ex: Gamma)</Label>
+                <Input 
+                  id="caseStudy" 
+                  placeholder="https://gamma.app/docs/..."
+                  value={formData.links.caseStudy} 
+                  onChange={e => setFormData({...formData, links: {...formData.links, caseStudy: e.target.value}})} 
+                  className="bg-background border-white/10 text-white"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex justify-end space-x-4 border-t pt-6">
-        <Button type="button" variant="outline" onClick={onCancel}>Annuler</Button>
-        <Button type="submit" disabled={isSubmitting}>
+      <div className="flex flex-col sm:flex-row justify-end gap-4 border-t border-white/5 pt-8 mt-8">
+        <Button type="button" variant="ghost" onClick={onCancel} className="text-white hover:bg-white/5">
+          <X className="mr-2 h-4 w-4" /> Annuler
+        </Button>
+        <Button type="submit" disabled={isSubmitting} className="bg-primary text-primary-foreground font-bold rounded-full px-8 h-12">
           {isSubmitting ? (
             <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enregistrement...</>
-          ) : project ? "Mettre à jour" : "Créer le projet"}
+          ) : (
+            <><Save className="mr-2 h-4 w-4" /> {project ? "Mettre à jour" : "Publier le projet"}</>
+          )}
         </Button>
       </div>
     </form>

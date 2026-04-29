@@ -24,26 +24,17 @@ export default function AdminDashboard() {
 
   const { data: projects, loading, error } = useCollection<any>(projectsQuery)
 
-  // expose project form trigger to layout
-  React.useEffect(() => {
-    (window as any).openProjectForm = () => {
-      setSelectedProject(null)
-      setIsEditing(true)
-    }
-    return () => delete (window as any).openProjectForm
-  }, [])
-
   const handleEdit = (project: any) => {
     setSelectedProject(project)
     setIsEditing(true)
   }
 
   const handleDelete = async (projectId: string) => {
-    if (!confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) return
+    if (!confirm("Êtes-vous sûr de vouloir supprimer ce projet ? Cette action est irréversible.")) return
     
     try {
       await deleteDoc(doc(db, 'projects', projectId))
-      toast({ title: "Projet supprimé", description: "L'entrée a été retirée de la base de données." })
+      toast({ title: "Projet supprimé", description: "L'entrée a été retirée avec succès." })
     } catch (error) {
       toast({ variant: "destructive", title: "Erreur", description: "Impossible de supprimer le projet." })
     }
@@ -62,8 +53,8 @@ export default function AdminDashboard() {
   if (isEditing) {
     return (
       <div className="space-y-6 animate-fade-in-up">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-headline font-bold text-primary">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-headline font-bold text-white">
             {selectedProject ? `Modifier : ${selectedProject.title}` : 'Nouveau Projet'}
           </h1>
         </div>
@@ -78,66 +69,62 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8 animate-fade-in-up">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-headline font-bold text-primary">Portfolio</h1>
-          <p className="text-muted-foreground">Gérez les applications affichées sur votre site.</p>
+          <h1 className="text-4xl font-headline font-bold text-white mb-2">Portfolio</h1>
+          <p className="text-muted-foreground">Gérez les réalisations affichées sur ANAVA STUDIO.</p>
         </div>
-        <Button onClick={() => { setSelectedProject(null); setIsEditing(true); }}>
+        <Button onClick={() => { setSelectedProject(null); setIsEditing(true); }} className="bg-primary text-primary-foreground font-bold rounded-full px-6">
           <Plus className="mr-2 h-4 w-4" /> Ajouter un projet
         </Button>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid gap-4">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="flex gap-6 p-4 border rounded-xl animate-pulse bg-white">
-              <Skeleton className="w-48 aspect-video rounded-lg" />
+            <div key={i} className="flex gap-6 p-6 border border-white/5 rounded-2xl animate-pulse bg-secondary/20">
+              <Skeleton className="w-48 aspect-video rounded-xl bg-white/5" />
               <div className="flex-1 space-y-4 py-2">
-                <Skeleton className="h-6 w-1/4" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-6 w-1/4 bg-white/5" />
+                <Skeleton className="h-4 w-full bg-white/5" />
               </div>
             </div>
           ))
         ) : projects && projects.length > 0 ? (
           projects.map((project) => (
-            <Card key={project.id} className="overflow-hidden hover:shadow-md transition-shadow">
+            <Card key={project.id} className="overflow-hidden border-white/5 bg-secondary/10 hover:bg-secondary/20 transition-all group">
               <CardContent className="p-0">
-                <div className="flex flex-col md:flex-row items-center p-4 gap-6">
-                  <div className="relative w-full md:w-48 aspect-video rounded-lg overflow-hidden bg-muted shrink-0">
-                    <Image src={project.imageUrl} alt={project.title} fill className="object-cover" />
+                <div className="flex flex-col md:flex-row items-center p-6 gap-6">
+                  <div className="relative w-full md:w-48 aspect-video rounded-xl overflow-hidden bg-muted shrink-0 shadow-2xl">
+                    <Image src={project.imageUrl || 'https://picsum.photos/seed/placeholder/800/600'} alt={project.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   
-                  <div className="flex-1 space-y-1 text-center md:text-left">
-                    <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-                      <h3 className="text-xl font-bold text-primary">{project.title}</h3>
-                      <Badge variant="secondary" className="text-[10px] py-0">{project.tag}</Badge>
+                  <div className="flex-1 space-y-2 text-center md:text-left">
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
+                      <h3 className="text-xl font-bold text-white">{project.title}</h3>
+                      <Badge variant="outline" className="text-[10px] uppercase border-primary/20 text-primary">{project.tag}</Badge>
                       {project.active ? (
-                        <Badge variant="default" className="bg-green-100 text-green-700 hover:bg-green-100 border-none flex items-center gap-1">
+                        <Badge variant="default" className="bg-green-500/10 text-green-500 border-none flex items-center gap-1">
                           <Eye size={12} /> Actif
                         </Badge>
                       ) : (
-                        <Badge variant="outline" className="text-muted-foreground flex items-center gap-1">
+                        <Badge variant="outline" className="text-muted-foreground border-white/10 flex items-center gap-1">
                           <EyeOff size={12} /> Masqué
                         </Badge>
                       )}
-                      {project.featured && (
-                        <Badge className="bg-accent/10 text-accent border-accent/20">★ Featured</Badge>
-                      )}
                     </div>
-                    <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
-                    <div className="text-xs text-muted-foreground pt-2">
-                      Ordre d'affichage : <span className="font-bold">{project.order}</span>
+                    <p className="text-sm text-muted-foreground line-clamp-2 max-w-2xl">{project.description}</p>
+                    <div className="text-xs text-muted-foreground/50">
+                      Ordre d'affichage : <span className="font-bold text-primary">{project.order}</span>
                     </div>
                   </div>
 
                   <div className="flex gap-2 shrink-0 w-full md:w-auto">
-                    <Button variant="outline" size="sm" className="flex-1 md:flex-none" onClick={() => handleEdit(project)}>
+                    <Button variant="outline" size="sm" className="flex-1 md:flex-none border-white/10 hover:bg-white/5" onClick={() => handleEdit(project)}>
                       <Edit2 className="h-4 w-4 mr-2" /> Modifier
                     </Button>
-                    <Button variant="outline" size="sm" className="flex-1 md:flex-none text-destructive hover:text-destructive hover:bg-destructive/5" onClick={() => handleDelete(project.id)}>
-                      <Trash2 className="h-4 w-4 mr-2" /> Supprimer
+                    <Button variant="outline" size="sm" className="flex-1 md:flex-none text-destructive hover:text-destructive hover:bg-destructive/10 border-white/10" onClick={() => handleDelete(project.id)}>
+                      <Trash2 className="h-4 w-4 mr-2" />
                     </Button>
                   </div>
                 </div>
@@ -145,9 +132,9 @@ export default function AdminDashboard() {
             </Card>
           ))
         ) : (
-          <div className="text-center py-20 border-2 border-dashed rounded-2xl bg-muted/20">
-            <p className="text-muted-foreground mb-4">Aucun projet trouvé dans votre portfolio.</p>
-            <Button onClick={() => setIsEditing(true)}>
+          <div className="text-center py-24 border-2 border-dashed border-white/5 rounded-3xl bg-secondary/10">
+            <p className="text-muted-foreground mb-6">Aucun projet dans votre base de données.</p>
+            <Button onClick={() => setIsEditing(true)} className="rounded-full">
               <Plus className="mr-2 h-4 w-4" /> Créer mon premier projet
             </Button>
           </div>
