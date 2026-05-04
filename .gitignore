@@ -22,7 +22,9 @@
 
 # misc
 .DS_Store
+Thumbs.db
 *.pem
+*.key
 
 # debug
 npm-debug.log*
@@ -37,9 +39,23 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# genkit
 .genkit/*
+
+# environment variables
 .env*
+!.env.example
 
 # firebase
+.firebase/
 firebase-debug.log
 firestore-debug.log
+ui-debug.log
+
+# firebase admin / secrets
+serviceAccountKey.json
+service-account.json
+
+# IDE
+.vscode/
+.idea/
