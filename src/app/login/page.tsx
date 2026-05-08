@@ -33,12 +33,16 @@ export default function LoginPage() {
       toast({ title: "Connexion réussie", description: "Bienvenue dans votre espace admin." })
       router.push('/admin')
     } catch (error: any) {
-      toast({ 
-        variant: "destructive", 
-        title: "Erreur de connexion", 
-        description: "Identifiants invalides ou problème technique." 
-      })
-    } finally {
+  console.error("Firebase login error:", error);
+  console.error("Code:", error.code);
+  console.error("Message:", error.message);
+
+  toast({
+    variant: "destructive",
+    title: "Erreur de connexion",
+    description: error.message || "Erreur inconnue"
+  });
+} finally {
       setLoading(false)
     }
   }
