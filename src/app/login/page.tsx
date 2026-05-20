@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import { FirebaseError } from 'firebase/app'
 import { useAuth, useUser } from '@/firebase'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -32,15 +33,16 @@ export default function LoginPage() {
       await signInWithEmailAndPassword(auth, email, password)
       toast({ title: "Connexion réussie", description: "Bienvenue dans votre espace admin." })
       router.push('/admin')
-    } catch (error: any) {
+    } catch (error: unknown) {
   console.error("Firebase login error:", error);
-  console.error("Code:", error.code);
-  console.error("Message:", error.message);
+  const message = error instanceof FirebaseError || error instanceof Error
+    ? error.message
+    : "Erreur inconnue";
 
   toast({
     variant: "destructive",
     title: "Erreur de connexion",
-    description: error.message || "Erreur inconnue"
+    description: message
   });
 } finally {
       setLoading(false)

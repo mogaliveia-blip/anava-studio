@@ -6,25 +6,26 @@ import { collection, query, orderBy, deleteDoc, doc } from 'firebase/firestore'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { ProjectForm } from '@/components/admin/ProjectForm'
+import { ProjectForm, type ProjectData, type ProjectRecord } from '@/components/admin/ProjectForm'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Edit2, Trash2, Plus, AlertCircle, Eye, EyeOff } from 'lucide-react'
 import { toast } from '@/hooks/use-toast'
 import Image from 'next/image'
+import { type CollectionReference } from 'firebase/firestore'
 
 export default function AdminDashboard() {
   const [isEditing, setIsEditing] = useState(false)
-  const [selectedProject, setSelectedProject] = useState<any>(null)
+  const [selectedProject, setSelectedProject] = useState<ProjectRecord | null>(null)
   const db = useFirestore()
 
   const projectsQuery = useMemo(() => query(
-    collection(db, 'projects'),
+    collection(db, 'projects') as CollectionReference<ProjectData>,
     orderBy('order', 'asc')
   ), [db])
 
-  const { data: projects, loading, error } = useCollection<any>(projectsQuery)
+  const { data: projects, loading, error } = useCollection<ProjectData>(projectsQuery)
 
-  const handleEdit = (project: any) => {
+  const handleEdit = (project: ProjectRecord) => {
     setSelectedProject(project)
     setIsEditing(true)
   }
@@ -35,7 +36,7 @@ export default function AdminDashboard() {
     try {
       await deleteDoc(doc(db, 'projects', projectId))
       toast({ title: "Projet supprimé", description: "L'entrée a été retirée avec succès." })
-    } catch (error) {
+    } catch {
       toast({ variant: "destructive", title: "Erreur", description: "Impossible de supprimer le projet." })
     }
   }
@@ -96,7 +97,7 @@ export default function AdminDashboard() {
               <CardContent className="p-0">
                 <div className="flex flex-col md:flex-row items-center p-6 gap-6">
                   <div className="relative w-full md:w-48 aspect-video rounded-xl overflow-hidden bg-muted shrink-0 shadow-2xl">
-                    <Image src={project.imageUrl || 'https://picsum.photos/seed/placeholder/800/600'} alt={project.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <Image src={project.imageUrl || 'https://picsum.photos/seed/placeholder/800/600'} alt={project.title || 'Projet'} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   
                   <div className="flex-1 space-y-2 text-center md:text-left">

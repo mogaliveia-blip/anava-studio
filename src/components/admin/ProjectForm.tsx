@@ -13,13 +13,47 @@ import { toast } from '@/hooks/use-toast'
 import { Loader2, Save, X } from 'lucide-react'
 
 interface ProjectFormProps {
-  project?: any
+  project?: ProjectRecord | null
   onSuccess: () => void
   onCancel: () => void
 }
 
+export interface ProjectLinks {
+  demo?: string
+  caseStudy?: string
+}
+
+export interface ProjectData {
+  title?: string
+  description?: string
+  tag?: string
+  order?: number
+  active?: boolean
+  featured?: boolean
+  imageUrl?: string
+  links?: ProjectLinks
+}
+
+export interface ProjectRecord extends ProjectData {
+  id: string
+}
+
+interface ProjectFormData {
+  title: string
+  description: string
+  tag: string
+  order: number
+  active: boolean
+  featured: boolean
+  imageUrl: string
+  links: {
+    demo: string
+    caseStudy: string
+  }
+}
+
 export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ProjectFormData>({
     title: '',
     description: '',
     tag: '',
@@ -64,17 +98,29 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
       return
     }
 
+    const projectPayload: ProjectData = {
+      ...formData,
+      title: formData.title.trim(),
+      description: formData.description.trim(),
+      tag: formData.tag.trim(),
+      imageUrl: formData.imageUrl.trim(),
+      links: {
+        demo: formData.links.demo.trim(),
+        caseStudy: formData.links.caseStudy.trim(),
+      },
+    }
+
     setIsSubmitting(true)
     try {
       if (project?.id) {
         await updateDoc(doc(db, 'projects', project.id), {
-          ...formData,
+          ...projectPayload,
           updatedAt: serverTimestamp()
         })
         toast({ title: "Projet mis à jour", description: "Modifications enregistrées avec succès." })
       } else {
         await addDoc(collection(db, 'projects'), {
-          ...formData,
+          ...projectPayload,
           createdAt: serverTimestamp()
         })
         toast({ title: "Projet créé", description: "Le projet a été ajouté à votre portfolio." })
@@ -175,6 +221,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
                 <Label htmlFor="demo" className="text-white/70 text-sm">Lien vers la démo / app</Label>
                 <Input 
                   id="demo" 
+                  type="url"
                   placeholder="https://app.anavastudio.fr/..."
                   value={formData.links.demo} 
                   onChange={e => setFormData({...formData, links: {...formData.links, demo: e.target.value}})} 
@@ -185,6 +232,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
                 <Label htmlFor="caseStudy" className="text-white/70 text-sm">Lien Étude de cas (ex: Gamma)</Label>
                 <Input 
                   id="caseStudy" 
+                  type="url"
                   placeholder="https://gamma.app/docs/..."
                   value={formData.links.caseStudy} 
                   onChange={e => setFormData({...formData, links: {...formData.links, caseStudy: e.target.value}})} 

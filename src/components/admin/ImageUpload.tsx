@@ -1,11 +1,10 @@
 "use client"
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useStorage } from '@/firebase'
-import { Upload, X, ImageIcon, Loader2, CheckCircle2 } from 'lucide-react'
+import { Upload, ImageIcon, Loader2, CheckCircle2 } from 'lucide-react'
 import Image from 'next/image'
 
 interface ImageUploadProps {

@@ -8,24 +8,94 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { toast } from '@/hooks/use-toast'
 import { Send, Mail, MapPin } from 'lucide-react'
+import {
+  contactSchema,
+  type ContactFieldErrors,
+  type ContactRequest,
+  type ContactResponse,
+} from '@/lib/contact'
 
 export function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [fieldErrors, setFieldErrors] = useState<ContactFieldErrors>({})
+  const [formMessage, setFormMessage] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (isSubmitting) return
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+    const payload: ContactRequest = {
+      name: String(formData.get('name') || ''),
+      email: String(formData.get('email') || ''),
+      message: String(formData.get('message') || ''),
+      website: String(formData.get('website') || ''),
+    }
+    const parsed = contactSchema.safeParse(payload)
+
+    setFieldErrors({})
+    setFormMessage(null)
+
+    if (!parsed.success) {
+      const nextFieldErrors = parsed.error.issues.reduce<ContactFieldErrors>((acc, issue) => {
+        const field = issue.path[0]
+
+        if (field === 'name' || field === 'email' || field === 'message') {
+          acc[field] = issue.message
+        }
+
+        return acc
+      }, {})
+
+      setFieldErrors(nextFieldErrors)
+      toast({
+        variant: "destructive",
+        title: "Formulaire incomplet",
+        description: "Merci de corriger les champs indiqués.",
+      })
+      return
+    }
+
     setIsSubmitting(true)
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    toast({
-      title: "Message envoyé !",
-      description: "Nous reviendrons vers vous dans les plus brefs délais.",
-    })
-    
-    setIsSubmitting(false)
-    ;(e.target as HTMLFormElement).reset()
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(parsed.data),
+      })
+      const result = (await response.json()) as ContactResponse
+
+      if (!response.ok || !result.ok) {
+        setFieldErrors(result.ok ? {} : result.fieldErrors || {})
+        setFormMessage(result.message)
+        toast({
+          variant: "destructive",
+          title: "Erreur d'envoi",
+          description: result.message,
+        })
+        return
+      }
+
+      setFormMessage(result.message)
+      form.reset()
+      toast({
+        title: "Message envoyé !",
+        description: result.message,
+      })
+    } catch {
+      setFormMessage("Impossible d'envoyer le message pour le moment.")
+      toast({
+        variant: "destructive",
+        title: "Erreur d'envoi",
+        description: "Impossible d'envoyer le message pour le moment.",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -72,9 +142,18 @@ export function Contact() {
                     id="name" 
                     name="name" 
                     placeholder="Votre nom complet" 
-                    required 
+                    required
+                    maxLength={100}
+                    aria-invalid={Boolean(fieldErrors.name)}
+                    aria-describedby={fieldErrors.name ? 'name-error' : undefined}
+                    disabled={isSubmitting}
                     className="bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary/50 transition-colors" 
                   />
+                  {fieldErrors.name && (
+                    <p id="name-error" className="text-sm text-destructive" role="alert">
+                      {fieldErrors.name}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-white">Email</Label>
@@ -83,9 +162,18 @@ export function Contact() {
                     name="email" 
                     type="email" 
                     placeholder="votre@email.com" 
-                    required 
+                    required
+                    maxLength={254}
+                    aria-invalid={Boolean(fieldErrors.email)}
+                    aria-describedby={fieldErrors.email ? 'email-error' : undefined}
+                    disabled={isSubmitting}
                     className="bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary/50 transition-colors" 
                   />
+                  {fieldErrors.email && (
+                    <p id="email-error" className="text-sm text-destructive" role="alert">
+                      {fieldErrors.email}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="message" className="text-white">Message</Label>
@@ -93,10 +181,38 @@ export function Contact() {
                     id="message" 
                     name="message" 
                     placeholder="Parlez-nous de votre projet..." 
-                    required 
+                    required
+                    maxLength={5000}
+                    aria-invalid={Boolean(fieldErrors.message)}
+                    aria-describedby={fieldErrors.message ? 'message-error' : undefined}
+                    disabled={isSubmitting}
                     className="min-h-[150px] bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary/50 transition-colors" 
                   />
+                  {fieldErrors.message && (
+                    <p id="message-error" className="text-sm text-destructive" role="alert">
+                      {fieldErrors.message}
+                    </p>
+                  )}
                 </div>
+                <div className="hidden" aria-hidden="true">
+                  <Label htmlFor="website">Site web</Label>
+                  <Input
+                    id="website"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    disabled={isSubmitting}
+                  />
+                </div>
+                {formMessage && (
+                  <p
+                    className="text-sm text-muted-foreground"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    {formMessage}
+                  </p>
+                )}
                 <Button type="submit" size="lg" className="w-full h-14 text-lg font-bold rounded-full" disabled={isSubmitting}>
                   {isSubmitting ? "Envoi en cours..." : (
                     <>

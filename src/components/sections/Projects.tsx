@@ -4,20 +4,25 @@
 import React, { useMemo } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { useFirestore, useCollection } from '@/firebase'
-import { collection, query, orderBy, where } from 'firebase/firestore'
+import { collection, query, orderBy, type CollectionReference } from 'firebase/firestore'
 import { Skeleton } from '@/components/ui/skeleton'
 import placeholderData from '@/app/lib/placeholder-images.json'
+import { BookOpen, ExternalLink } from 'lucide-react'
 
-interface Project {
-  id: string;
+interface ProjectData {
   title: string;
   description: string;
   imageUrl: string;
   tag: string;
   order: number;
   active: boolean;
+  links?: {
+    demo?: string;
+    caseStudy?: string;
+  };
 }
 
 export function Projects() {
@@ -25,11 +30,11 @@ export function Projects() {
   
   // Simplification de la requête pour éviter les erreurs d'index au démarrage
   const projectsQuery = useMemo(() => query(
-    collection(db, 'projects'),
+    collection(db, 'projects') as CollectionReference<ProjectData>,
     orderBy('order', 'asc')
   ), [db])
   
-  const { data: firestoreProjects, loading, error } = useCollection<Project>(projectsQuery)
+  const { data: firestoreProjects, loading } = useCollection<ProjectData>(projectsQuery)
 
   // Filtrage côté client pour éviter les erreurs d'index Firestore (composite index required for where + order)
   const activeProjects = useMemo(() => {
@@ -96,7 +101,11 @@ export function Projects() {
                 </CardContent>
               </Card>
             ))
-          ) : activeProjects?.map((project) => (
+          ) : activeProjects?.map((project) => {
+            const demoUrl = project.links?.demo?.trim()
+            const caseStudyUrl = project.links?.caseStudy?.trim()
+
+            return (
               <Card key={project.id} className="overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 border-white/5 bg-secondary/50">
                 <div className="relative aspect-video overflow-hidden">
                   <Image 
@@ -115,10 +124,30 @@ export function Projects() {
                   <p className="text-muted-foreground text-lg leading-relaxed">
                     {project.description}
                   </p>
+                  {(demoUrl || caseStudyUrl) && (
+                    <div className="flex flex-wrap gap-3 pt-6">
+                      {demoUrl && (
+                        <Button asChild size="sm" className="rounded-full font-bold">
+                          <a href={demoUrl} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className="mr-2 h-4 w-4" />
+                            Voir la démo
+                          </a>
+                        </Button>
+                      )}
+                      {caseStudyUrl && (
+                        <Button asChild size="sm" variant="outline" className="rounded-full border-white/10 text-white hover:bg-white/5">
+                          <a href={caseStudyUrl} target="_blank" rel="noopener noreferrer">
+                            <BookOpen className="mr-2 h-4 w-4" />
+                            Présentation
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             )
-          )}
+          })}
         </div>
       </div>
     </section>

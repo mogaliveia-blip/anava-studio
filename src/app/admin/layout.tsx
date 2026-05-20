@@ -4,12 +4,14 @@ import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUser, useAuth } from '@/firebase'
 import { Button } from '@/components/ui/button'
-import { signOut } from 'firebase/auth'
+import { getIdTokenResult, signOut } from 'firebase/auth'
 import Link from 'next/link'
-import { LogOut, LayoutDashboard, ExternalLink, PlusCircle } from 'lucide-react'
+import { LogOut, LayoutDashboard, ExternalLink, ShieldAlert } from 'lucide-react'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useUser()
+  const [isCheckingClaims, setIsCheckingClaims] = React.useState(true)
+  const [isAdmin, setIsAdmin] = React.useState(false)
   const auth = useAuth()
   const router = useRouter()
 
@@ -19,13 +21,71 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   }, [user, loading, router])
 
+  useEffect(() => {
+    let isMounted = true
+
+    async function checkAdminClaim() {
+      if (loading) return
+
+      if (!user) {
+        if (isMounted) {
+          setIsAdmin(false)
+          setIsCheckingClaims(false)
+        }
+        return
+      }
+
+      try {
+        const token = await getIdTokenResult(user, true)
+        if (isMounted) setIsAdmin(token.claims.admin === true)
+      } catch (error) {
+        console.error(error)
+        if (isMounted) setIsAdmin(false)
+      } finally {
+        if (isMounted) setIsCheckingClaims(false)
+      }
+    }
+
+    checkAdminClaim()
+
+    return () => {
+      isMounted = false
+    }
+  }, [user, loading])
+
   const handleLogout = async () => {
     await signOut(auth)
     router.push('/')
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-background text-primary">Authentification en cours...</div>
+  if (loading || isCheckingClaims) return <div className="min-h-screen flex items-center justify-center bg-background text-primary">Authentification en cours...</div>
   if (!user) return null
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+        <div className="max-w-md text-center space-y-6">
+          <div className="mx-auto w-14 h-14 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
+            <ShieldAlert className="h-7 w-7" />
+          </div>
+          <div className="space-y-2">
+            <h1 className="text-2xl font-headline font-bold text-white">Accès administrateur requis</h1>
+            <p className="text-muted-foreground">
+              Votre compte est connecté, mais il ne dispose pas du rôle admin nécessaire pour gérer le portfolio.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button asChild variant="outline" className="border-white/10 text-white hover:bg-white/5">
+              <Link href="/">Retour au site</Link>
+            </Button>
+            <Button variant="ghost" className="text-destructive hover:text-destructive hover:bg-destructive/10" onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" /> Déconnexion
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col font-body">
