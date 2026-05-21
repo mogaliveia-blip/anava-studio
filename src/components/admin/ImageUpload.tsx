@@ -55,7 +55,7 @@ export function ImageUpload({ onUploadComplete, currentImageUrl }: ImageUploadPr
       <Label className="text-white font-bold">Image de présentation</Label>
       <div 
         onClick={() => !isUploading && fileInputRef.current?.click()}
-        className="border-2 border-dashed border-white/10 rounded-2xl aspect-video relative overflow-hidden group cursor-pointer hover:border-primary/50 transition-all bg-background/50 flex flex-col items-center justify-center text-center p-6"
+        className="border-2 border-dashed border-border rounded-2xl aspect-video relative overflow-hidden group cursor-pointer hover:border-primary/50 transition-all bg-background flex flex-col items-center justify-center text-center p-6"
       >
         {preview ? (
           <>
@@ -74,7 +74,7 @@ export function ImageUpload({ onUploadComplete, currentImageUrl }: ImageUploadPr
           </>
         ) : (
           <div className="space-y-4">
-            <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto group-hover:bg-primary/10 transition-colors">
+            <div className="w-16 h-16 rounded-2xl bg-card border border-border flex items-center justify-center mx-auto group-hover:bg-primary/10 transition-colors">
               <ImageIcon className="h-8 w-8 text-muted-foreground group-hover:text-primary transition-colors" />
             </div>
             <div>
@@ -87,7 +87,7 @@ export function ImageUpload({ onUploadComplete, currentImageUrl }: ImageUploadPr
         {isUploading && (
           <div className="absolute inset-0 bg-background/90 backdrop-blur-sm flex flex-col items-center justify-center z-10 p-6">
             <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
-            <div className="w-full max-w-[200px] h-1.5 bg-white/10 rounded-full overflow-hidden">
+            <div className="w-full max-w-[200px] h-1.5 bg-muted rounded-full overflow-hidden">
               <div 
                 className="h-full bg-primary transition-all duration-300" 
                 style={{ width: `${progress}%` }}

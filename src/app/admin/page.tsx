@@ -75,7 +75,7 @@ export default function AdminDashboard() {
           <h1 className="text-4xl font-headline font-bold text-white mb-2">Portfolio</h1>
           <p className="text-muted-foreground">Gérez les réalisations affichées sur ANAVA STUDIO.</p>
         </div>
-        <Button onClick={() => { setSelectedProject(null); setIsEditing(true); }} className="bg-primary text-primary-foreground font-bold rounded-full px-6">
+        <Button onClick={() => { setSelectedProject(null); setIsEditing(true); }} className="rounded-full px-6">
           <Plus className="mr-2 h-4 w-4" /> Ajouter un projet
         </Button>
       </div>
@@ -83,17 +83,17 @@ export default function AdminDashboard() {
       <div className="grid gap-4">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="flex gap-6 p-6 border border-white/5 rounded-2xl animate-pulse bg-secondary/20">
-              <Skeleton className="w-48 aspect-video rounded-xl bg-white/5" />
+            <div key={i} className="flex gap-6 p-6 border border-border rounded-2xl animate-pulse bg-card">
+              <Skeleton className="w-48 aspect-video rounded-xl bg-muted" />
               <div className="flex-1 space-y-4 py-2">
-                <Skeleton className="h-6 w-1/4 bg-white/5" />
-                <Skeleton className="h-4 w-full bg-white/5" />
+                <Skeleton className="h-6 w-1/4 bg-muted" />
+                <Skeleton className="h-4 w-full bg-muted" />
               </div>
             </div>
           ))
         ) : projects && projects.length > 0 ? (
           projects.map((project) => (
-            <Card key={project.id} className="overflow-hidden border-white/5 bg-secondary/10 hover:bg-secondary/20 transition-all group">
+            <Card key={project.id} className="overflow-hidden border-border bg-card hover:border-primary/30 transition-all group">
               <CardContent className="p-0">
                 <div className="flex flex-col md:flex-row items-center p-6 gap-6">
                   <div className="relative w-full md:w-48 aspect-video rounded-xl overflow-hidden bg-muted shrink-0 shadow-2xl">
@@ -109,7 +109,7 @@ export default function AdminDashboard() {
                           <Eye size={12} /> Actif
                         </Badge>
                       ) : (
-                        <Badge variant="outline" className="text-muted-foreground border-white/10 flex items-center gap-1">
+                        <Badge variant="outline" className="text-muted-foreground border-border flex items-center gap-1">
                           <EyeOff size={12} /> Masqué
                         </Badge>
                       )}
@@ -121,10 +121,10 @@ export default function AdminDashboard() {
                   </div>
 
                   <div className="flex gap-2 shrink-0 w-full md:w-auto">
-                    <Button variant="outline" size="sm" className="flex-1 md:flex-none border-white/10 hover:bg-white/5" onClick={() => handleEdit(project)}>
+                    <Button variant="outline" size="sm" className="flex-1 md:flex-none" onClick={() => handleEdit(project)}>
                       <Edit2 className="h-4 w-4 mr-2" /> Modifier
                     </Button>
-                    <Button variant="outline" size="sm" className="flex-1 md:flex-none text-destructive hover:text-destructive hover:bg-destructive/10 border-white/10" onClick={() => handleDelete(project.id)}>
+                    <Button variant="outline" size="sm" className="flex-1 md:flex-none text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30" onClick={() => handleDelete(project.id)}>
                       <Trash2 className="h-4 w-4 mr-2" />
                     </Button>
                   </div>
@@ -133,7 +133,7 @@ export default function AdminDashboard() {
             </Card>
           ))
         ) : (
-          <div className="text-center py-24 border-2 border-dashed border-white/5 rounded-3xl bg-secondary/10">
+          <div className="text-center py-24 border-2 border-dashed border-border rounded-3xl bg-card">
             <p className="text-muted-foreground mb-6">Aucun projet dans votre base de données.</p>
             <Button onClick={() => setIsEditing(true)} className="rounded-full">
               <Plus className="mr-2 h-4 w-4" /> Créer mon premier projet

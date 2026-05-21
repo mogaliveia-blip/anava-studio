@@ -43,18 +43,20 @@ export function Projects() {
   }, [firestoreProjects])
 
   const defaultImageUrl = "https://picsum.photos/seed/default/800/600"
+  const cardClassName = "h-[640px] md:h-[720px] xl:h-[780px] overflow-hidden group transition-all duration-300 border-border bg-card hover:border-primary/30 flex flex-col"
+  const descriptionClassName = "h-44 md:h-56 xl:h-64 overflow-y-auto pr-5 text-muted-foreground text-lg leading-relaxed [scrollbar-color:#D6B25E_#161616] [scrollbar-width:thin] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-secondary [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/70 [&::-webkit-scrollbar-thumb:hover]:bg-primary"
 
   // Si Firestore est vide ou en erreur, on affiche les placeholders
   const showPlaceholders = !loading && (!activeProjects || activeProjects.length === 0);
 
   return (
-    <section id="realisations" className="py-24 bg-background">
+    <section id="realisations" className="py-28 bg-background">
       <div className="container mx-auto px-6">
         <div className="max-w-3xl mb-20 animate-fade-in-up">
           <p className="text-primary font-bold uppercase tracking-widest text-sm mb-4">Portfolio</p>
           <h2 className="font-headline text-4xl md:text-6xl font-bold text-white mb-6">
             Des solutions concrètes <br />
-            <span className="text-primary text-gradient">pour votre métier</span>
+            <span className="text-primary">pour votre métier</span>
           </h2>
           <p className="text-xl text-muted-foreground">
             Découvrez nos dernières réalisations logicielles, comme <strong>Mission Pilot</strong>, conçues pour optimiser les opérations complexes.
@@ -64,19 +66,19 @@ export function Projects() {
         <div className="grid md:grid-cols-2 gap-10">
           {loading ? (
             Array.from({ length: 2 }).map((_, i) => (
-              <Card key={i} className="overflow-hidden border-white/5 bg-secondary/50">
+              <Card key={i} className="overflow-hidden border-border bg-card">
                 <Skeleton className="aspect-video w-full" />
                 <CardContent className="p-8">
-                  <Skeleton className="h-8 w-1/3 mb-4 bg-white/5" />
-                  <Skeleton className="h-20 w-full bg-white/5" />
+                  <Skeleton className="h-8 w-1/3 mb-4 bg-muted" />
+                  <Skeleton className="h-20 w-full bg-muted" />
                 </CardContent>
               </Card>
             ))
           ) : showPlaceholders ? (
             // Contenu de démonstration (Fallback)
             placeholderData.placeholderImages.map((placeholder, index) => (
-              <Card key={index} className="overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 border-white/5 bg-secondary/50">
-                <div className="relative aspect-video overflow-hidden">
+              <Card key={index} className={cardClassName}>
+                <div className="relative aspect-video overflow-hidden shrink-0">
                   <Image 
                     src={placeholder.imageUrl} 
                     alt={placeholder.title}
@@ -84,20 +86,27 @@ export function Projects() {
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                     data-ai-hint={placeholder.imageHint}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
                   <div className="absolute top-4 left-4">
-                    <Badge variant="default" className="bg-primary text-primary-foreground px-4 py-1.5 text-xs font-bold rounded-full uppercase tracking-tighter">
+                    <Badge variant="default" className="bg-primary text-primary-foreground px-4 py-1.5 text-xs font-bold rounded-full uppercase tracking-normal">
                       {placeholder.tag}
                     </Badge>
                   </div>
                 </div>
-                <CardContent className="p-10">
+                <CardContent className="p-10 flex flex-1 min-h-0 flex-col">
                   <h3 className="font-headline text-3xl font-bold text-white mb-4 group-hover:text-primary transition-colors">
                     {placeholder.title}
                   </h3>
-                  <p className="text-muted-foreground text-lg leading-relaxed">
-                    {placeholder.description}
-                  </p>
+                  <div className="relative">
+                    <p
+                      className={descriptionClassName}
+                      tabIndex={0}
+                      aria-label={`Description du projet ${placeholder.title}`}
+                    >
+                      {placeholder.description}
+                    </p>
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-card to-transparent" aria-hidden="true" />
+                  </div>
                 </CardContent>
               </Card>
             ))
@@ -106,26 +115,33 @@ export function Projects() {
             const caseStudyUrl = project.links?.caseStudy?.trim()
 
             return (
-              <Card key={project.id} className="overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 border-white/5 bg-secondary/50">
-                <div className="relative aspect-video overflow-hidden">
+              <Card key={project.id} className={cardClassName}>
+                <div className="relative aspect-video overflow-hidden shrink-0">
                   <Image 
                     src={project.imageUrl || defaultImageUrl} 
                     alt={project.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-primary text-primary-foreground px-4 py-1.5 text-xs font-bold rounded-full">{project.tag}</Badge>
                   </div>
                 </div>
-                <CardContent className="p-10">
+                <CardContent className="p-10 flex flex-1 min-h-0 flex-col">
                   <h3 className="font-headline text-3xl font-bold text-white mb-4 group-hover:text-primary transition-colors">{project.title}</h3>
-                  <p className="text-muted-foreground text-lg leading-relaxed">
-                    {project.description}
-                  </p>
+                  <div className="relative">
+                    <p
+                      className={descriptionClassName}
+                      tabIndex={0}
+                      aria-label={`Description du projet ${project.title}`}
+                    >
+                      {project.description}
+                    </p>
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-card to-transparent" aria-hidden="true" />
+                  </div>
                   {(demoUrl || caseStudyUrl) && (
-                    <div className="flex flex-wrap gap-3 pt-6">
+                    <div className="flex flex-wrap gap-3 pt-6 mt-auto">
                       {demoUrl && (
                         <Button asChild size="sm" className="rounded-full font-bold">
                           <a href={demoUrl} target="_blank" rel="noopener noreferrer">
@@ -135,7 +151,7 @@ export function Projects() {
                         </Button>
                       )}
                       {caseStudyUrl && (
-                        <Button asChild size="sm" variant="outline" className="rounded-full border-white/10 text-white hover:bg-white/5">
+                        <Button asChild size="sm" variant="outline" className="rounded-full">
                           <a href={caseStudyUrl} target="_blank" rel="noopener noreferrer">
                             <BookOpen className="mr-2 h-4 w-4" />
                             Présentation

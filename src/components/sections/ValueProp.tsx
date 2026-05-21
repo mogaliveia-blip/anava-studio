@@ -12,8 +12,8 @@ export function ValueProp() {
     {
       title: "Conception sur mesure",
       description: "Chaque application est pensée pour votre organisation unique. Pas de solutions génériques qui forcent vos processus.",
-      icon: <PenTool className="w-8 h-8 text-white" />,
-      color: "bg-white/5"
+      icon: <PenTool className="w-8 h-8 text-primary" />,
+      color: "bg-primary/5"
     },
     {
       title: "Fiabilité & suivi",
@@ -24,7 +24,7 @@ export function ValueProp() {
   ]
 
   return (
-    <section id="expertise" className="py-24 bg-background">
+    <section id="expertise" className="py-28 bg-background">
       <div className="container mx-auto px-6">
         <div className="max-w-3xl mb-20">
           <p className="text-primary font-bold uppercase tracking-widest text-sm mb-4">Expertise</p>
@@ -39,8 +39,8 @@ export function ValueProp() {
 
         <div className="grid md:grid-cols-3 gap-8">
           {values.map((value, index) => (
-            <div key={index} className="flex flex-col items-start p-10 rounded-3xl border border-white/5 bg-secondary/30 hover:border-primary/30 transition-all group">
-              <div className={`w-16 h-16 rounded-2xl ${value.color} flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500`}>
+            <div key={index} className="flex flex-col items-start p-10 rounded-2xl border border-border bg-card hover:border-primary/30 transition-all duration-300 group">
+              <div className={`w-16 h-16 rounded-2xl ${value.color} border border-primary/10 flex items-center justify-center mb-8 group-hover:bg-primary/10 transition-colors duration-300`}>
                 {value.icon}
               </div>
               <h3 className="font-headline text-2xl font-bold text-white mb-4">{value.title}</h3>

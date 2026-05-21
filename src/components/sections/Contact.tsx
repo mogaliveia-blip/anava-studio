@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { toast } from '@/hooks/use-toast'
-import { Send, Mail, MapPin } from 'lucide-react'
+import { Send, Mail, MapPin, Phone } from 'lucide-react'
 import {
   contactSchema,
   type ContactFieldErrors,
@@ -99,7 +99,7 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="py-24 bg-background border-t border-white/5">
+    <section id="contact" className="py-28 bg-background border-t border-border">
       <div className="container mx-auto px-6">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16">
@@ -114,16 +114,34 @@ export function Contact() {
               
               <div className="space-y-8">
                 <div className="flex items-start space-x-4 group">
-                  <div className="w-12 h-12 rounded-xl bg-secondary/50 border border-white/5 flex items-center justify-center text-primary shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-card border border-border flex items-center justify-center text-primary shrink-0 group-hover:border-primary/30 transition-colors duration-300">
                     <Mail size={24} />
                   </div>
                   <div>
                     <h4 className="font-headline font-bold text-lg text-white">Contact par Email</h4>
-                    <p className="text-muted-foreground group-hover:text-primary transition-colors">contact@anavastudio.fr</p>
+                    <a
+                      href="mailto:contact@anavastudio.fr"
+                      className="text-muted-foreground group-hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
+                    >
+                      contact@anavastudio.fr
+                    </a>
                   </div>
                 </div>
+                <a
+                  href="tel:+33781456221"
+                  aria-label="Appeler ANAVA STUDIO au 07 81 45 62 21"
+                  className="flex items-start space-x-4 group rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-card border border-border flex items-center justify-center text-primary shrink-0 group-hover:border-primary/30 transition-colors duration-300">
+                    <Phone size={24} />
+                  </div>
+                  <div>
+                    <h4 className="font-headline font-bold text-lg text-white">Téléphone</h4>
+                    <p className="text-muted-foreground group-hover:text-primary transition-colors">07 81 45 62 21</p>
+                  </div>
+                </a>
                 <div className="flex items-start space-x-4 group">
-                  <div className="w-12 h-12 rounded-xl bg-secondary/50 border border-white/5 flex items-center justify-center text-primary shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-card border border-border flex items-center justify-center text-primary shrink-0 group-hover:border-primary/30 transition-colors duration-300">
                     <MapPin size={24} />
                   </div>
                   <div>
@@ -134,7 +152,7 @@ export function Contact() {
               </div>
             </div>
 
-            <div className="bg-secondary/20 p-8 md:p-10 rounded-2xl border border-white/5 shadow-2xl backdrop-blur-sm">
+            <div className="bg-card p-8 md:p-10 rounded-2xl border border-border shadow-[0_24px_80px_rgba(0,0,0,0.24)]">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-white">Nom</Label>
@@ -147,7 +165,7 @@ export function Contact() {
                     aria-invalid={Boolean(fieldErrors.name)}
                     aria-describedby={fieldErrors.name ? 'name-error' : undefined}
                     disabled={isSubmitting}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary/50 transition-colors" 
+                    className="bg-background border-border text-white placeholder:text-muted-foreground focus:border-primary/50 transition-colors" 
                   />
                   {fieldErrors.name && (
                     <p id="name-error" className="text-sm text-destructive" role="alert">
@@ -167,7 +185,7 @@ export function Contact() {
                     aria-invalid={Boolean(fieldErrors.email)}
                     aria-describedby={fieldErrors.email ? 'email-error' : undefined}
                     disabled={isSubmitting}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary/50 transition-colors" 
+                    className="bg-background border-border text-white placeholder:text-muted-foreground focus:border-primary/50 transition-colors" 
                   />
                   {fieldErrors.email && (
                     <p id="email-error" className="text-sm text-destructive" role="alert">
@@ -186,7 +204,7 @@ export function Contact() {
                     aria-invalid={Boolean(fieldErrors.message)}
                     aria-describedby={fieldErrors.message ? 'message-error' : undefined}
                     disabled={isSubmitting}
-                    className="min-h-[150px] bg-white/5 border-white/10 text-white placeholder:text-muted-foreground focus:border-primary/50 transition-colors" 
+                    className="min-h-[150px] bg-background border-border text-white placeholder:text-muted-foreground focus:border-primary/50 transition-colors" 
                   />
                   {fieldErrors.message && (
                     <p id="message-error" className="text-sm text-destructive" role="alert">

@@ -75,7 +75,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button asChild variant="outline" className="border-white/10 text-white hover:bg-white/5">
+            <Button asChild variant="outline">
               <Link href="/">Retour au site</Link>
             </Button>
             <Button variant="ghost" className="text-destructive hover:text-destructive hover:bg-destructive/10" onClick={handleLogout}>
@@ -89,20 +89,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen bg-background flex flex-col font-body">
-      <header className="border-b border-white/5 bg-secondary/20 backdrop-blur-md sticky top-0 z-40">
+      <header className="border-b border-border bg-secondary/95 backdrop-blur-md sticky top-0 z-40">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
-            <Link href="/admin" className="font-headline text-xl font-bold text-white tracking-tighter">
+            <Link href="/admin" className="font-headline text-xl font-bold text-white">
               ANAVA<span className="text-primary"> ADMIN</span>
             </Link>
             <nav className="hidden md:flex items-center space-x-2">
-              <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-primary hover:bg-white/5">
+              <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
                 <Link href="/admin"><LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard</Link>
               </Button>
             </nav>
           </div>
           <div className="flex items-center space-x-2">
-            <Button asChild variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/5">
+            <Button asChild variant="outline" size="sm">
               <Link href="/" target="_blank"><ExternalLink className="mr-2 h-4 w-4" /> Voir le site</Link>
             </Button>
             <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10" onClick={handleLogout}>

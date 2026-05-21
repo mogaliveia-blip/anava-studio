@@ -11,12 +11,13 @@ export function Trust() {
   ]
 
   return (
-    <section className="py-24 bg-background">
+    <section className="py-28 bg-background">
       <div className="container mx-auto px-6">
-        <div className="bg-secondary/20 rounded-[2rem] p-8 md:p-16 border border-white/5 shadow-xl">
+        <div className="bg-card rounded-2xl p-8 md:p-16 border border-border shadow-[0_24px_80px_rgba(0,0,0,0.24)]">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="font-headline text-3xl md:text-5xl font-bold text-primary mb-8">
+              <p className="text-primary font-bold uppercase tracking-widest text-sm mb-4">Fiabilité</p>
+              <h2 className="font-headline text-3xl md:text-5xl font-bold text-white mb-8">
                 Des outils fiables et sécurisés
               </h2>
               <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
@@ -25,7 +26,7 @@ export function Trust() {
               <div className="grid sm:grid-cols-2 gap-8">
                 {features.map((f, i) => (
                   <div key={i} className="flex flex-col space-y-3">
-                    <div className="w-12 h-12 rounded-lg bg-background flex items-center justify-center text-primary border border-white/5">
+                    <div className="w-12 h-12 rounded-lg bg-background flex items-center justify-center text-primary border border-border">
                       {f.icon}
                     </div>
                     <h4 className="font-headline font-bold text-white">{f.title}</h4>
@@ -35,18 +36,18 @@ export function Trust() {
               </div>
             </div>
             
-            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-inner bg-background flex items-center justify-center p-8 border border-white/5">
+            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-inner bg-background flex items-center justify-center p-8 border border-border">
                 {/* Visual representation of stack */}
                 <div className="grid grid-cols-2 gap-4 w-full max-w-md">
-                    <div className="bg-secondary/40 p-6 rounded-xl border border-white/5 flex flex-col items-center justify-center space-y-2 backdrop-blur-sm">
+                    <div className="bg-secondary p-6 rounded-xl border border-border flex flex-col items-center justify-center space-y-2">
                         <span className="text-4xl font-headline font-bold text-white">Next</span>
                         <span className="text-xs uppercase tracking-widest text-muted-foreground">Frontend</span>
                     </div>
-                    <div className="bg-secondary/40 p-6 rounded-xl border border-white/5 flex flex-col items-center justify-center space-y-2 backdrop-blur-sm">
+                    <div className="bg-secondary p-6 rounded-xl border border-border flex flex-col items-center justify-center space-y-2">
                         <span className="text-4xl font-headline font-bold text-primary">Firebase</span>
                         <span className="text-xs uppercase tracking-widest text-muted-foreground">Backend</span>
                     </div>
-                    <div className="col-span-2 bg-primary text-primary-foreground p-6 rounded-xl shadow-sm flex flex-col items-center justify-center space-y-2">
+                    <div className="col-span-2 bg-primary text-primary-foreground p-6 rounded-xl shadow-sm shadow-primary/10 flex flex-col items-center justify-center space-y-2">
                         <span className="text-2xl font-headline font-bold uppercase tracking-tight text-center">Infrastructure Cloud</span>
                         <span className="text-xs uppercase tracking-widest opacity-70 font-bold">Sécurité & Échelle</span>
                     </div>

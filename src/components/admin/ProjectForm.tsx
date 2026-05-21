@@ -135,7 +135,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 bg-secondary/20 p-8 md:p-12 rounded-3xl border border-white/5 shadow-2xl animate-fade-in-up">
+    <form onSubmit={handleSubmit} className="space-y-8 bg-card p-8 md:p-12 rounded-3xl border border-border shadow-[0_24px_80px_rgba(0,0,0,0.24)] animate-fade-in-up">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="space-y-6">
           <div className="space-y-2">
@@ -145,7 +145,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
               value={formData.title} 
               onChange={e => setFormData({...formData, title: e.target.value})} 
               required 
-              className="bg-background border-white/10 text-white focus:border-primary/50 h-12"
+              className="bg-background border-border text-white focus:border-primary/50 h-12"
               placeholder="ex: Mission Pilot"
             />
           </div>
@@ -158,7 +158,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
               value={formData.tag} 
               onChange={e => setFormData({...formData, tag: e.target.value})} 
               required 
-              className="bg-background border-white/10 text-white focus:border-primary/50 h-12"
+              className="bg-background border-border text-white focus:border-primary/50 h-12"
             />
           </div>
 
@@ -166,7 +166,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
             <Label htmlFor="description" className="text-white font-bold">Description</Label>
             <Textarea 
               id="description" 
-              className="min-h-[160px] bg-background border-white/10 text-white focus:border-primary/50 leading-relaxed"
+              className="min-h-[160px] bg-background border-border text-white focus:border-primary/50 leading-relaxed"
               value={formData.description} 
               onChange={e => setFormData({...formData, description: e.target.value})} 
               required 
@@ -182,7 +182,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
                 type="number"
                 value={formData.order} 
                 onChange={e => setFormData({...formData, order: parseInt(e.target.value) || 0})} 
-                className="bg-background border-white/10 text-white h-12"
+                className="bg-background border-border text-white h-12"
               />
             </div>
             <div className="flex flex-col justify-center space-y-4 pt-6">
@@ -214,7 +214,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
             onUploadComplete={handleImageUpload} 
           />
 
-          <div className="space-y-6 bg-background/50 p-6 rounded-2xl border border-white/5">
+          <div className="space-y-6 bg-background p-6 rounded-2xl border border-border">
             <h4 className="font-headline font-bold text-sm text-primary uppercase tracking-widest">Liens additionnels</h4>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -225,7 +225,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
                   placeholder="https://app.anavastudio.fr/..."
                   value={formData.links.demo} 
                   onChange={e => setFormData({...formData, links: {...formData.links, demo: e.target.value}})} 
-                  className="bg-background border-white/10 text-white"
+                  className="bg-background border-border text-white"
                 />
               </div>
               <div className="space-y-2">
@@ -236,7 +236,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
                   placeholder="https://gamma.app/docs/..."
                   value={formData.links.caseStudy} 
                   onChange={e => setFormData({...formData, links: {...formData.links, caseStudy: e.target.value}})} 
-                  className="bg-background border-white/10 text-white"
+                  className="bg-background border-border text-white"
                 />
               </div>
             </div>
@@ -244,11 +244,11 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-end gap-4 border-t border-white/5 pt-8 mt-8">
-        <Button type="button" variant="ghost" onClick={onCancel} className="text-white hover:bg-white/5">
+      <div className="flex flex-col sm:flex-row justify-end gap-4 border-t border-border pt-8 mt-8">
+        <Button type="button" variant="ghost" onClick={onCancel} className="text-white">
           <X className="mr-2 h-4 w-4" /> Annuler
         </Button>
-        <Button type="submit" disabled={isSubmitting} className="bg-primary text-primary-foreground font-bold rounded-full px-8 h-12">
+        <Button type="submit" disabled={isSubmitting} className="rounded-full px-8 h-12">
           {isSubmitting ? (
             <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enregistrement...</>
           ) : (
