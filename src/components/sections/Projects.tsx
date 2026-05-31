@@ -25,6 +25,62 @@ interface ProjectData {
   };
 }
 
+function ProjectDescription({
+  description,
+  title,
+  className,
+}: {
+  description: string
+  title: string
+  className: string
+}) {
+  const blocks = description
+    .replace(/\r\n/g, '\n')
+    .split(/\n{2,}/)
+    .map(block => block.trim())
+    .filter(Boolean)
+
+  return (
+    <div
+      className={className}
+      tabIndex={0}
+      aria-label={`Description du projet ${title}`}
+    >
+      <div className="space-y-5">
+        {blocks.map((block, blockIndex) => {
+          const lines = block.split('\n').map(line => line.trim()).filter(Boolean)
+          const headingMatch = lines.length === 1 ? lines[0].match(/^#{2,3}\s+(.+)$/) : null
+          const isBulletList = lines.length > 0 && lines.every(line => /^[-*]\s+/.test(line))
+
+          if (headingMatch) {
+            return (
+              <h4 key={blockIndex} className="font-headline text-xl font-bold text-white">
+                {headingMatch[1]}
+              </h4>
+            )
+          }
+
+          if (isBulletList) {
+            return (
+              <ul key={blockIndex} className="list-disc space-y-2 pl-5">
+                {lines.map((line, lineIndex) => (
+                  <li key={lineIndex}>{line.replace(/^[-*]\s+/, '')}</li>
+                ))}
+              </ul>
+            )
+          }
+
+          return (
+            <p key={blockIndex} className="whitespace-pre-line">
+              {block}
+            </p>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 export function Projects() {
   const db = useFirestore()
   
@@ -98,13 +154,11 @@ export function Projects() {
                     {placeholder.title}
                   </h3>
                   <div className="relative">
-                    <p
+                    <ProjectDescription
+                      description={placeholder.description}
+                      title={placeholder.title}
                       className={descriptionClassName}
-                      tabIndex={0}
-                      aria-label={`Description du projet ${placeholder.title}`}
-                    >
-                      {placeholder.description}
-                    </p>
+                    />
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-card to-transparent" aria-hidden="true" />
                   </div>
                 </CardContent>
@@ -131,13 +185,11 @@ export function Projects() {
                 <CardContent className="p-10 flex flex-1 min-h-0 flex-col">
                   <h3 className="font-headline text-3xl font-bold text-white mb-4 group-hover:text-primary transition-colors">{project.title}</h3>
                   <div className="relative">
-                    <p
+                    <ProjectDescription
+                      description={project.description}
+                      title={project.title}
                       className={descriptionClassName}
-                      tabIndex={0}
-                      aria-label={`Description du projet ${project.title}`}
-                    >
-                      {project.description}
-                    </p>
+                    />
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-card to-transparent" aria-hidden="true" />
                   </div>
                   {(demoUrl || caseStudyUrl) && (
