@@ -1,7 +1,17 @@
+'use client'
+
 import React from 'react'
 import Link from 'next/link'
+import {
+  trackEmailClick,
+  trackNavigationClick,
+  trackPhoneClick,
+} from '@/lib/analytics'
+import { seoConfig } from '@/lib/seo'
 
 export function Footer() {
+  const year = new Date().getFullYear()
+
   return (
     <footer className="bg-secondary text-foreground py-16 border-t border-border">
       <div className="container mx-auto px-6">
@@ -11,36 +21,48 @@ export function Footer() {
               ANAVA<span className="text-primary"> STUDIO</span>
             </Link>
             <p className="text-muted-foreground max-w-md leading-relaxed">
-              Studio digital spécialisé dans la création d'applications sur mesure pour les entreprises. Simplicité, fiabilité et réalité terrain sont au cœur de notre démarche.
+              Studio digital en Bretagne spécialisé dans la création d'applications web sur mesure, d'outils métiers et de solutions numériques pour les entreprises.
             </p>
             <div className="mt-8 space-y-2 text-sm">
-              <a href="mailto:contact@anavastudio.fr" className="block text-white hover:text-primary transition-colors">contact@anavastudio.fr</a>
-              <a href="tel:+33781456221" className="block text-white hover:text-primary transition-colors">07 81 45 62 21</a>
+              <a
+                href={`mailto:${seoConfig.contactEmail}`}
+                onClick={() => trackEmailClick('footer')}
+                className="block text-white hover:text-primary transition-colors"
+              >
+                {seoConfig.contactEmail}
+              </a>
+              <a
+                href={seoConfig.phoneHref}
+                onClick={() => trackPhoneClick('footer')}
+                className="block text-white hover:text-primary transition-colors"
+              >
+                {seoConfig.phone}
+              </a>
             </div>
           </div>
           
           <div>
             <h4 className="font-headline font-bold text-lg mb-6">Navigation</h4>
             <ul className="space-y-4 text-muted-foreground">
-              <li><Link href="/#expertise" className="hover:text-primary transition-colors">Expertise</Link></li>
-              <li><Link href="/#services" className="hover:text-primary transition-colors">Services</Link></li>
-              <li><Link href="/#realisations" className="hover:text-primary transition-colors">Réalisations</Link></li>
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
+              <li><Link href="/#expertise" onClick={() => trackNavigationClick('Expertise', 'footer')} className="hover:text-primary transition-colors">Expertise</Link></li>
+              <li><Link href="/#services" onClick={() => trackNavigationClick('Services', 'footer')} className="hover:text-primary transition-colors">Services</Link></li>
+              <li><Link href="/#realisations" onClick={() => trackNavigationClick('Réalisations', 'footer')} className="hover:text-primary transition-colors">Réalisations</Link></li>
+              <li><Link href="/contact" onClick={() => trackNavigationClick('Contact', 'footer')} className="hover:text-primary transition-colors">Contact</Link></li>
             </ul>
           </div>
           
           <div>
             <h4 className="font-headline font-bold text-lg mb-6">Légal</h4>
             <ul className="space-y-4 text-muted-foreground">
-              <li><Link href="/mentions-legales" className="hover:text-primary transition-colors">Mentions légales</Link></li>
-              <li><Link href="/confidentialite" className="hover:text-primary transition-colors">Confidentialité</Link></li>
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
+              <li><Link href="/mentions-legales" onClick={() => trackNavigationClick('Mentions légales', 'footer')} className="hover:text-primary transition-colors">Mentions légales</Link></li>
+              <li><Link href="/confidentialite" onClick={() => trackNavigationClick('Confidentialité', 'footer')} className="hover:text-primary transition-colors">Confidentialité</Link></li>
+              <li><Link href="/contact" onClick={() => trackNavigationClick('Contact légal', 'footer')} className="hover:text-primary transition-colors">Contact</Link></li>
             </ul>
           </div>
         </div>
         
         <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center text-muted-foreground text-sm">
-          <p>© {new Date().getFullYear()} ANAVA STUDIO. Tous droits réservés.</p>
+          <p>© {year} ANAVA STUDIO. Tous droits réservés.</p>
           <div className="mt-4 md:mt-0">
             Conçu avec passion par ANAVA STUDIO
           </div>

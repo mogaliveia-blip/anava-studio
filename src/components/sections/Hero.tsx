@@ -21,7 +21,7 @@ export function Hero() {
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-2xl leading-relaxed">
-            ANAVA STUDIO conçoit des outils digitaux simples, fiables et adaptés à votre activité. Nous transformons vos processus métiers en expériences fluides.
+            ANAVA STUDIO conçoit des applications web et outils métiers sur mesure pour simplifier vos processus, automatiser les tâches répétitives et accompagner votre transformation numérique.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center gap-4">

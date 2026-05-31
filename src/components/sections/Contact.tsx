@@ -14,6 +14,12 @@ import {
   type ContactRequest,
   type ContactResponse,
 } from '@/lib/contact'
+import {
+  trackContactSubmit,
+  trackEmailClick,
+  trackPhoneClick,
+} from '@/lib/analytics'
+import { seoConfig } from '@/lib/seo'
 
 export function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -72,6 +78,7 @@ export function Contact() {
       if (!response.ok || !result.ok) {
         setFieldErrors(result.ok ? {} : result.fieldErrors || {})
         setFormMessage(result.message)
+        trackContactSubmit('error')
         toast({
           variant: "destructive",
           title: "Erreur d'envoi",
@@ -82,12 +89,14 @@ export function Contact() {
 
       setFormMessage(result.message)
       form.reset()
+      trackContactSubmit('success')
       toast({
         title: "Message envoyé !",
         description: result.message,
       })
     } catch {
       setFormMessage("Impossible d'envoyer le message pour le moment.")
+      trackContactSubmit('error')
       toast({
         variant: "destructive",
         title: "Erreur d'envoi",
@@ -109,7 +118,7 @@ export function Contact() {
                 Parlons de votre <span className="text-primary">projet</span>
               </h2>
               <p className="text-lg text-muted-foreground mb-12">
-                Vous avez un besoin spécifique ou une idée en tête ? Nous sommes là pour vous accompagner dans sa réalisation technique.
+                Vous avez un besoin spécifique ou une idée en tête ? Nous vous aidons à cadrer, développer et déployer une application web ou un outil métier adapté à vos processus.
               </p>
               
               <div className="space-y-8">
@@ -120,16 +129,18 @@ export function Contact() {
                   <div>
                     <h4 className="font-headline font-bold text-lg text-white">Contact par Email</h4>
                     <a
-                      href="mailto:contact@anavastudio.fr"
+                      href={`mailto:${seoConfig.contactEmail}`}
+                      onClick={() => trackEmailClick('contact_section')}
                       className="text-muted-foreground group-hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
                     >
-                      contact@anavastudio.fr
+                      {seoConfig.contactEmail}
                     </a>
                   </div>
                 </div>
                 <a
-                  href="tel:+33781456221"
-                  aria-label="Appeler ANAVA STUDIO au 07 81 45 62 21"
+                  href={seoConfig.phoneHref}
+                  aria-label={`Appeler ANAVA STUDIO au ${seoConfig.phone}`}
+                  onClick={() => trackPhoneClick('contact_section')}
                   className="flex items-start space-x-4 group rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >
                   <div className="w-12 h-12 rounded-xl bg-card border border-border flex items-center justify-center text-primary shrink-0 group-hover:border-primary/30 transition-colors duration-300">
@@ -137,7 +148,7 @@ export function Contact() {
                   </div>
                   <div>
                     <h4 className="font-headline font-bold text-lg text-white">Téléphone</h4>
-                    <p className="text-muted-foreground group-hover:text-primary transition-colors">07 81 45 62 21</p>
+                    <p className="text-muted-foreground group-hover:text-primary transition-colors">{seoConfig.phone}</p>
                   </div>
                 </a>
                 <div className="flex items-start space-x-4 group">

@@ -1,10 +1,22 @@
 import type { Metadata } from 'next'
 import { Footer } from '@/components/layout/Footer'
 import { Navbar } from '@/components/layout/Navbar'
+import { absoluteUrl, seoConfig } from '@/lib/seo'
 
 export const metadata: Metadata = {
-  title: 'Politique de confidentialité | Anava Studio',
-  description: 'Politique de confidentialité d’Anava Studio : données collectées, finalités, prestataires, sécurité et droits RGPD.',
+  title: 'Politique de confidentialité',
+  description:
+    "Politique de confidentialité d'Anava Studio concernant la collecte et le traitement des données personnelles.",
+  alternates: {
+    canonical: '/confidentialite',
+  },
+  openGraph: {
+    title: 'Politique de confidentialité',
+    description:
+      "Politique de confidentialité d'Anava Studio concernant la collecte et le traitement des données personnelles.",
+    url: absoluteUrl('/confidentialite'),
+    images: [seoConfig.ogImage],
+  },
 }
 
 export default function ConfidentialitePage() {

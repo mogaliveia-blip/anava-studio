@@ -8,7 +8,8 @@ export function Services() {
     "Outils métier personnalisés",
     "Devis & facturation",
     "Suivi client & reporting",
-    "Applications terrain (techniciens, interventions)"
+    "Applications terrain (techniciens, interventions)",
+    "Automatisations et intégrations Firebase"
   ]
 
   return (
@@ -20,7 +21,7 @@ export function Services() {
             Ce que nous créons
           </h2>
           <p className="text-xl text-muted-foreground mb-16 leading-relaxed">
-            Nous spécialisons notre savoir-faire dans les outils qui font tourner les entreprises. Si vous avez un processus répétitif ou complexe, nous pouvons l'automatiser et le simplifier.
+            Nous spécialisons notre savoir-faire dans les solutions numériques qui font tourner les entreprises. Si vous avez un processus répétitif ou complexe, nous pouvons l'automatiser et le simplifier avec une base technique moderne comme Next.js et Firebase.
           </p>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

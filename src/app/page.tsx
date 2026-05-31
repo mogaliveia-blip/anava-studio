@@ -1,4 +1,5 @@
 
+import type { Metadata } from 'next'
 import { Navbar } from '@/components/layout/Navbar'
 import { Hero } from '@/components/sections/Hero'
 import { ValueProp } from '@/components/sections/ValueProp'
@@ -8,6 +9,23 @@ import { Approach } from '@/components/sections/Approach'
 import { Trust } from '@/components/sections/Trust'
 import { Contact } from '@/components/sections/Contact'
 import { Footer } from '@/components/layout/Footer'
+import { absoluteUrl, seoConfig } from '@/lib/seo'
+
+export const metadata: Metadata = {
+  title: 'Applications web et outils métiers sur mesure',
+  description:
+    "Anava Studio accompagne les entreprises dans la création d'applications web, d'outils métiers, d'automatisations et de solutions numériques sur mesure.",
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'Applications web et outils métiers sur mesure',
+    description:
+      "Anava Studio accompagne les entreprises dans la création d'applications web, d'outils métiers, d'automatisations et de solutions numériques sur mesure.",
+    url: absoluteUrl('/'),
+    images: [seoConfig.ogImage],
+  },
+}
 
 export default function Home() {
   return (

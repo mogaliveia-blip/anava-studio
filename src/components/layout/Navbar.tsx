@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { trackNavigationClick } from '@/lib/analytics'
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -65,13 +66,14 @@ export function Navbar() {
             <Link
               key={link.name}
               href={link.href}
+              onClick={() => trackNavigationClick(link.name, 'header')}
               className="text-sm font-semibold uppercase tracking-widest text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm transition-colors"
             >
               {link.name}
             </Link>
           ))}
           <Button asChild variant="default" size="sm" className="rounded-full px-8">
-            <Link href="/#contact">Contact</Link>
+            <Link href="/#contact" onClick={() => trackNavigationClick('Contact', 'header')}>Contact</Link>
           </Button>
         </div>
 
@@ -112,7 +114,10 @@ export function Navbar() {
           <Link
             key={link.name}
             href={link.href}
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={() => {
+              trackNavigationClick(link.name, 'header')
+              setIsMobileMenuOpen(false)
+            }}
             tabIndex={isMobileMenuOpen ? undefined : -1}
             className="text-3xl font-headline font-bold text-white border-b border-white/10 pb-6 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-sm"
           >
@@ -120,7 +125,13 @@ export function Navbar() {
           </Link>
         ))}
         <Button asChild variant="default" size="lg" className="w-full rounded-full py-8 text-xl font-bold" onClick={() => setIsMobileMenuOpen(false)}>
-          <Link href="/#contact" tabIndex={isMobileMenuOpen ? undefined : -1}>Parlons de votre projet</Link>
+          <Link
+            href="/#contact"
+            tabIndex={isMobileMenuOpen ? undefined : -1}
+            onClick={() => trackNavigationClick('Contact', 'header')}
+          >
+            Parlons de votre projet
+          </Link>
         </Button>
       </div>
     </nav>

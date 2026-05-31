@@ -2,10 +2,22 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Footer } from '@/components/layout/Footer'
 import { Navbar } from '@/components/layout/Navbar'
+import { absoluteUrl, seoConfig } from '@/lib/seo'
 
 export const metadata: Metadata = {
-  title: 'Mentions légales | Anava Studio',
-  description: 'Mentions légales, informations éditeur, hébergement et conditions applicables au site Anava Studio.',
+  title: 'Mentions légales',
+  description:
+    'Mentions légales du site Anava Studio, entreprise individuelle spécialisée en programmation informatique et solutions numériques.',
+  alternates: {
+    canonical: '/mentions-legales',
+  },
+  openGraph: {
+    title: 'Mentions légales',
+    description:
+      'Mentions légales du site Anava Studio, entreprise individuelle spécialisée en programmation informatique et solutions numériques.',
+    url: absoluteUrl('/mentions-legales'),
+    images: [seoConfig.ogImage],
+  },
 }
 
 export default function MentionsLegalesPage() {
