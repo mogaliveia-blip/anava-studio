@@ -36,19 +36,19 @@ export function Trust() {
               </div>
             </div>
             
-            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-inner bg-background flex items-center justify-center p-8 border border-border">
+            <div className="relative min-h-[360px] md:min-h-[400px] rounded-2xl overflow-hidden shadow-inner bg-background flex items-center justify-center p-4 sm:p-6 md:p-8 border border-border">
                 {/* Visual representation of stack */}
-                <div className="grid grid-cols-2 gap-4 w-full max-w-md">
-                    <div className="bg-secondary p-6 rounded-xl border border-border flex flex-col items-center justify-center space-y-2">
-                        <span className="text-4xl font-headline font-bold text-white">Next</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-md">
+                    <div className="min-h-32 bg-secondary p-5 sm:p-6 rounded-xl border border-border flex flex-col items-center justify-center space-y-2 text-center">
+                        <span className="block text-3xl sm:text-4xl font-headline font-bold text-white leading-tight">Next</span>
                         <span className="text-xs uppercase tracking-widest text-muted-foreground">Frontend</span>
                     </div>
-                    <div className="bg-secondary p-6 rounded-xl border border-border flex flex-col items-center justify-center space-y-2">
-                        <span className="text-4xl font-headline font-bold text-primary">Firebase</span>
+                    <div className="min-h-32 bg-secondary p-5 sm:p-6 rounded-xl border border-border flex flex-col items-center justify-center space-y-2 text-center">
+                        <span className="block text-3xl sm:text-4xl font-headline font-bold text-primary leading-tight">Firebase</span>
                         <span className="text-xs uppercase tracking-widest text-muted-foreground">Backend</span>
                     </div>
-                    <div className="col-span-2 bg-primary text-primary-foreground p-6 rounded-xl shadow-sm shadow-primary/10 flex flex-col items-center justify-center space-y-2">
-                        <span className="text-2xl font-headline font-bold uppercase tracking-tight text-center">Infrastructure Cloud</span>
+                    <div className="sm:col-span-2 min-h-32 bg-primary text-primary-foreground p-5 sm:p-6 rounded-xl shadow-sm shadow-primary/10 flex flex-col items-center justify-center space-y-2 text-center">
+                        <span className="block text-xl sm:text-2xl font-headline font-bold uppercase tracking-tight leading-tight">Infrastructure Cloud</span>
                         <span className="text-xs uppercase tracking-widest opacity-70 font-bold">Sécurité & Échelle</span>
                     </div>
                 </div>
