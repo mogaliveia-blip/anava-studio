@@ -2,7 +2,7 @@
 "use client"
 
 import React, { useMemo } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -168,7 +168,7 @@ export function Projects() {
   }, [firestoreProjects])
 
   const defaultImageUrl = "https://picsum.photos/seed/default/800/600"
-  const cardClassName = "h-[640px] md:h-[720px] xl:h-[780px] overflow-hidden group transition-all duration-300 border-border bg-card hover:border-primary/30 flex flex-col"
+  const cardClassName = "min-h-[640px] md:min-h-[720px] xl:min-h-[780px] overflow-hidden group transition-all duration-300 border-border bg-card hover:border-primary/30 flex flex-col"
   const descriptionClassName = "h-44 md:h-56 xl:h-64 overflow-y-auto pr-5 text-muted-foreground text-lg leading-relaxed [scrollbar-color:#D6B25E_#161616] [scrollbar-width:thin] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-secondary [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/70 [&::-webkit-scrollbar-thumb:hover]:bg-primary"
 
   // Si Firestore est vide ou en erreur, on affiche les placeholders
@@ -235,7 +235,7 @@ export function Projects() {
                   title={project.title}
                   tag={project.tag}
                 />
-                <CardContent className="p-10 flex flex-1 min-h-0 flex-col">
+                <CardContent className="p-10 pb-6 flex flex-1 min-h-0 flex-col">
                   <h3 className="font-headline text-3xl font-bold text-white mb-4 group-hover:text-primary transition-colors">{project.title}</h3>
                   <div className="relative">
                     <ProjectDescription
@@ -245,27 +245,27 @@ export function Projects() {
                     />
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-card to-transparent" aria-hidden="true" />
                   </div>
-                  {(demoUrl || caseStudyUrl) && (
-                    <div className="flex flex-wrap gap-3 pt-6 mt-auto">
-                      {demoUrl && (
-                        <Button asChild size="sm" className="rounded-full font-bold">
-                          <a href={demoUrl} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="mr-2 h-4 w-4" />
-                            Voir la démo
-                          </a>
-                        </Button>
-                      )}
-                      {caseStudyUrl && (
-                        <Button asChild size="sm" variant="outline" className="rounded-full">
-                          <a href={caseStudyUrl} target="_blank" rel="noopener noreferrer">
-                            <BookOpen className="mr-2 h-4 w-4" />
-                            Présentation
-                          </a>
-                        </Button>
-                      )}
-                    </div>
-                  )}
                 </CardContent>
+                {(demoUrl || caseStudyUrl) && (
+                  <CardFooter className="mt-auto flex shrink-0 flex-wrap gap-3 p-10 pt-0">
+                    {demoUrl && (
+                      <Button asChild size="sm" className="rounded-full font-bold">
+                        <a href={demoUrl} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          Voir la démo
+                        </a>
+                      </Button>
+                    )}
+                    {caseStudyUrl && (
+                      <Button asChild size="sm" variant="outline" className="rounded-full">
+                        <a href={caseStudyUrl} target="_blank" rel="noopener noreferrer">
+                          <BookOpen className="mr-2 h-4 w-4" />
+                          Présentation
+                        </a>
+                      </Button>
+                    )}
+                  </CardFooter>
+                )}
               </Card>
             )
           })}
