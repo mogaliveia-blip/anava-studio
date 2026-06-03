@@ -5,6 +5,14 @@ import React, { useMemo } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import Image from 'next/image'
 import { useFirestore, useCollection } from '@/firebase'
 import { collection, query, orderBy, type CollectionReference } from 'firebase/firestore'
@@ -81,6 +89,67 @@ function ProjectDescription({
   )
 }
 
+function ProjectImageViewer({
+  src,
+  title,
+  tag,
+  imageHint,
+}: {
+  src: string
+  title: string
+  tag: string
+  imageHint?: string
+}) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button
+          type="button"
+          className="relative aspect-video w-full shrink-0 overflow-hidden text-left cursor-zoom-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          aria-label={`Agrandir l'image du projet ${title}`}
+        >
+          <Image
+            src={src}
+            alt={title}
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            data-ai-hint={imageHint}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+          <div className="absolute top-4 left-4">
+            <Badge variant="default" className="bg-primary text-primary-foreground px-4 py-1.5 text-xs font-bold rounded-full uppercase tracking-normal">
+              {tag}
+            </Badge>
+          </div>
+        </button>
+      </DialogTrigger>
+      <DialogContent className="w-[96vw] max-w-[1440px] h-[92dvh] max-h-[920px] gap-0 overflow-hidden border-border bg-background/95 p-0 shadow-2xl sm:rounded-lg">
+        <DialogTitle className="sr-only">{title}</DialogTitle>
+        <DialogDescription className="sr-only">
+          Image de présentation agrandie du projet {title}.
+        </DialogDescription>
+        <DialogClose asChild>
+          <button
+            type="button"
+            className="relative h-full w-full cursor-zoom-out bg-black/80 p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:p-6"
+            aria-label={`Fermer l'image agrandie du projet ${title}`}
+          >
+            <Image
+              src={src}
+              alt={title}
+              fill
+              quality={100}
+              sizes="96vw"
+              className="object-contain p-3 sm:p-6"
+            />
+          </button>
+        </DialogClose>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 export function Projects() {
   const db = useFirestore()
   
@@ -134,21 +203,12 @@ export function Projects() {
             // Contenu de démonstration (Fallback)
             placeholderData.placeholderImages.map((placeholder, index) => (
               <Card key={index} className={cardClassName}>
-                <div className="relative aspect-video overflow-hidden shrink-0">
-                  <Image 
-                    src={placeholder.imageUrl} 
-                    alt={placeholder.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    data-ai-hint={placeholder.imageHint}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <Badge variant="default" className="bg-primary text-primary-foreground px-4 py-1.5 text-xs font-bold rounded-full uppercase tracking-normal">
-                      {placeholder.tag}
-                    </Badge>
-                  </div>
-                </div>
+                <ProjectImageViewer
+                  src={placeholder.imageUrl}
+                  title={placeholder.title}
+                  tag={placeholder.tag}
+                  imageHint={placeholder.imageHint}
+                />
                 <CardContent className="p-10 flex flex-1 min-h-0 flex-col">
                   <h3 className="font-headline text-3xl font-bold text-white mb-4 group-hover:text-primary transition-colors">
                     {placeholder.title}
@@ -170,18 +230,11 @@ export function Projects() {
 
             return (
               <Card key={project.id} className={cardClassName}>
-                <div className="relative aspect-video overflow-hidden shrink-0">
-                  <Image 
-                    src={project.imageUrl || defaultImageUrl} 
-                    alt={project.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <Badge className="bg-primary text-primary-foreground px-4 py-1.5 text-xs font-bold rounded-full">{project.tag}</Badge>
-                  </div>
-                </div>
+                <ProjectImageViewer
+                  src={project.imageUrl || defaultImageUrl}
+                  title={project.title}
+                  tag={project.tag}
+                />
                 <CardContent className="p-10 flex flex-1 min-h-0 flex-col">
                   <h3 className="font-headline text-3xl font-bold text-white mb-4 group-hover:text-primary transition-colors">{project.title}</h3>
                   <div className="relative">
