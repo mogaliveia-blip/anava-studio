@@ -6,7 +6,7 @@ import { useUser, useAuth } from '@/firebase'
 import { Button } from '@/components/ui/button'
 import { getIdTokenResult, signOut } from 'firebase/auth'
 import Link from 'next/link'
-import { LogOut, LayoutDashboard, ExternalLink, ShieldAlert, SearchCheck } from 'lucide-react'
+import { LogOut, LayoutDashboard, ExternalLink, ShieldAlert, SearchCheck, PanelsTopLeft } from 'lucide-react'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useUser()
@@ -101,6 +101,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </Button>
               <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
                 <Link href="/admin/seo"><SearchCheck className="mr-2 h-4 w-4" /> SEO</Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
+                <Link href="/admin/studio"><PanelsTopLeft className="mr-2 h-4 w-4" /> Studio</Link>
               </Button>
             </nav>
           </div>
