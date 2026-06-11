@@ -16,8 +16,8 @@ export function Hero() {
           </div>
           
           <h1 className="font-headline text-5xl md:text-8xl font-bold leading-[1.08] md:leading-[1.05] mb-8 text-white">
-            Des applications <br />
-            <span className="text-primary">sur mesure</span>
+            Anava Studio, <br />
+            applications <span className="text-primary">sur mesure</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-2xl leading-relaxed">

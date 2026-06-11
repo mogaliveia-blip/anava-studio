@@ -1,7 +1,8 @@
 export const seoConfig = {
   siteName: 'Anava Studio',
   siteUrl: 'https://anavastudio.fr',
-  defaultTitle: 'Anava Studio | Applications web et outils métiers sur mesure',
+  homeTitle: 'Anava Studio | Applications web, logiciels métier et IA',
+  defaultTitle: 'Anava Studio | Applications web, logiciels métier et IA',
   titleTemplate: '%s | Anava Studio',
   defaultDescription:
     'Anava Studio conçoit des applications web, outils métiers et solutions numériques sur mesure pour accompagner les entreprises dans leur transformation digitale.',

@@ -12,14 +12,19 @@ import { Footer } from '@/components/layout/Footer'
 import { absoluteUrl, seoConfig } from '@/lib/seo'
 
 export const metadata: Metadata = {
-  title: 'Applications web et outils métiers sur mesure',
+  title: {
+    absolute: seoConfig.homeTitle,
+  },
   description:
     "Anava Studio accompagne les entreprises dans la création d'applications web, d'outils métiers, d'automatisations et de solutions numériques sur mesure.",
   alternates: {
-    canonical: '/',
+    canonical: absoluteUrl('/'),
   },
   openGraph: {
-    title: 'Applications web et outils métiers sur mesure',
+    type: 'website',
+    locale: seoConfig.locale,
+    siteName: seoConfig.siteName,
+    title: seoConfig.homeTitle,
     description:
       "Anava Studio accompagne les entreprises dans la création d'applications web, d'outils métiers, d'automatisations et de solutions numériques sur mesure.",
     url: absoluteUrl('/'),

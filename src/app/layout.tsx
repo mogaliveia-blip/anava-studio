@@ -19,8 +19,7 @@ export const metadata: Metadata = {
     default: seoConfig.defaultTitle,
     template: seoConfig.titleTemplate,
   },
-  description:
-    'Anava Studio conçoit des applications web, outils métiers et solutions numériques sur mesure pour les entreprises, indépendants et organisations.',
+  description: seoConfig.defaultDescription,
   applicationName: seoConfig.siteName,
   authors: [{ name: seoConfig.siteName }],
   creator: seoConfig.siteName,
@@ -35,15 +34,13 @@ export const metadata: Metadata = {
     siteName: seoConfig.siteName,
     url: seoConfig.siteUrl,
     title: seoConfig.defaultTitle,
-    description:
-      'Anava Studio conçoit des applications web, outils métiers et solutions numériques sur mesure pour les entreprises, indépendants et organisations.',
+    description: seoConfig.defaultDescription,
     images: [seoConfig.ogImage],
   },
   twitter: {
     card: 'summary_large_image',
     title: seoConfig.defaultTitle,
-    description:
-      'Anava Studio conçoit des applications web, outils métiers et solutions numériques sur mesure pour les entreprises, indépendants et organisations.',
+    description: seoConfig.defaultDescription,
     images: [seoConfig.ogImage.url],
   },
   robots: {

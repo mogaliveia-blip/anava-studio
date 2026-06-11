@@ -2,8 +2,9 @@ import { seoConfig } from '@/lib/seo'
 
 const structuredData = {
   '@context': 'https://schema.org',
-  '@type': 'ProfessionalService',
+  '@type': ['LocalBusiness', 'ProfessionalService'],
   name: seoConfig.siteName,
+  alternateName: 'Anava',
   url: seoConfig.siteUrl,
   email: seoConfig.contactEmail,
   telephone: '+33781456221',
