@@ -1,7 +1,7 @@
 
 "use client"
 
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -25,10 +25,11 @@ export function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<ContactFieldErrors>({})
   const [formMessage, setFormMessage] = useState<string | null>(null)
+  const isSubmittingRef = useRef(false)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (isSubmitting) return
+    if (isSubmittingRef.current) return
 
     const form = e.currentTarget
     const formData = new FormData(form)
@@ -63,6 +64,13 @@ export function Contact() {
       return
     }
 
+    if (parsed.data.website) {
+      setFormMessage('Message envoyé.')
+      form.reset()
+      return
+    }
+
+    isSubmittingRef.current = true
     setIsSubmitting(true)
 
     try {
@@ -103,6 +111,7 @@ export function Contact() {
         description: "Impossible d'envoyer le message pour le moment.",
       })
     } finally {
+      isSubmittingRef.current = false
       setIsSubmitting(false)
     }
   }

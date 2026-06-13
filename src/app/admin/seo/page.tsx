@@ -27,6 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { MarketingOverview } from '@/components/admin/seo/marketing-overview'
 import { absoluteUrl, seoConfig } from '@/lib/seo'
 import { cn } from '@/lib/utils'
 
@@ -314,6 +315,8 @@ export default function SeoDashboardPage() {
           </Table>
         </CardContent>
       </Card>
+
+      <MarketingOverview />
 
       <section className="grid gap-4 lg:grid-cols-[1fr_1.1fr]">
         <Card>
